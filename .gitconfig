@@ -1,0 +1,21 @@
+[user]
+  email = 32962031+toomuat@users.noreply.github.com
+  name = tom
+[core]
+  pager = less -cm
+  quotepath = false
+  ignorecase = false
+  pager = less -q -R
+  editor = nvim
+  autoCRLF = false
+  excludesFile = ${HOME}/.gitignore_global
+  whitespace = cr-at-eol
+[color]
+  ui = true
+  whitespace = cr-at-eol
+[init]
+  defaultBranch = main
+[pager]
+  diff = diff-highlight | less -r
+  log = diff-highlight | less
+  show = diff-highlight | less
