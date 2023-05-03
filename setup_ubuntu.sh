@@ -19,7 +19,7 @@ zplug install
 
 # fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-~/.fzf/install
+yes ~/.fzf/install
 
 # Neovim
 # wget https://github.com/neovim/neovim/releases/download/v0.8.2/nvim-linux64.deb && \
