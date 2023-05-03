@@ -32,9 +32,19 @@ alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
 alias grep="grep --color=auto"
+alias tm='tmux'
+alias tma='tmux attach'
+alias tmk='tmux kill-server'
+alias cdd='cd $(fd -d 1 -t d -I -L -E .git | fzf)'
+alias ca='bat'
+alias agg="ag -s --pager 'less -R'"
 alias gdb="gdb -q"
 alias v="/usr/local/bin/nvim"
 alias c="code"
+alias dt='dutree'
+alias vg="vgrep"
+alias f="fzf"
+alias chx="chmod +x"
 alias gh-run="gh workflow run .github/workflows/$workflow --ref $(git branch --show-current)"
 alias gh-watch="gh run list --workflow=$workflow | grep $(git branch --show-current) | cut -f 7 | head -n 1 | xargs gh run watch"
 alias gh-view="gh run list --workflow=$workflow | grep $(git branch --show-current) | cut -f 7 | head -n 1 | xargs gh run view"
