@@ -9,8 +9,13 @@ mason.setup({
 
 lspconfig.setup {
   ensure_installed = {
-    "tailwindcss",
+    "bashls",
+    "clangd",
+    "jdtls",
+    "lua_ls",
     "rust_analyzer",
-    "clangd"
+    "tailwindcss",
+    "terraformls",
+    "tsserver",
   },
 }
