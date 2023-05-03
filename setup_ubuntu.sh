@@ -4,8 +4,8 @@ sudo apt update
 sudo apt upgrade -y
 
 sudo apt install -y \
-  git zsh tmux wget cmake build-essential python3 \
-  python3-pip
+  zsh tmux wget cmake build-essential python3 \
+  python3-pip unzip
 
 chsh -s "$(command -v zsh)"
 
@@ -28,6 +28,10 @@ wget https://github.com/neovim/neovim/releases/download/v0.9.0/nvim-linux64.tar.
   sudo cp -r nvim-linux64/lib/nvim /usr/local/lib && \
   sudo cp -r nvim-linux64/share/nvim /usr/local/share && \
   rm nvim-linux64.tar.gz
+# Packer
+git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+ ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+# Run PackerIntall in Neovim
 
 # Docker
 sudo apt-get install -y \
