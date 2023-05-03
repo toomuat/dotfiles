@@ -11,6 +11,10 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/toomuat/dotfiles/main/in
 Scripts for setting up a development environment in a container.
 
 ```bash
+docker run -it ubuntu:23.04 /bin/bash
+
+apt update
+apt install -y curl
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/toomuat/dotfiles/main/setup_container.sh)"
 ```
 
