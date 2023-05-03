@@ -112,6 +112,7 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "zsh-users/zsh-autosuggestions", defer:2
 zplug "zsh-users/zsh-completions", defer:2
 zplug "rupa/z", use:z.sh
+zplug load --verbose > /dev/null
 
 GREEN="%{\e[38;5;118m%}"
 YELLOW="%{\e[38;5;190m%}"

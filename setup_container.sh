@@ -30,15 +30,15 @@ git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
 /bin/bash "${DOTFILES_PATH}"/link.sh
 
 # zplug
+set +e
 curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
 # source ~/".zshrc"
 # zplug install
 
 # fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-yes | ~/.fzf/install > /dev/null &
-yes_pid=$!
-wait $yes_pid
+yes | ~/.fzf/install > /dev/null
+set -e
 
 # Neovim
 # wget https://github.com/neovim/neovim/releases/download/v0.8.2/nvim-linux64.deb && \
@@ -60,3 +60,4 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 # source ~/".zshrc"
 # nvm install node # "node" is an alias for the latest version
 # nvm install-latest-npm
+
