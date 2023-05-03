@@ -1,7 +1,9 @@
+DOTFILES_PATH="${DOTFILES_PATH:-${HOME}/dotfiles}"
+
 if [[ "${OSTYPE}" == "darwin"* ]]; then
-  source ~/.mac.zshrc
+  source "${DOTFILES_PATH}"/.mac.zshrc
 elif [[ "$(uname -r)" =~ "microsoft" ]]; then
-  source ~/.wsl.zshrc
+  source "${DOTFILES_PATH}"/.wsl.zshrc
 fi
 
 export LANG=C.UTF-8

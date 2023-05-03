@@ -9,7 +9,7 @@ find . \
   -type f \
   -name "*.sh" \
   -exec shellcheck \
-    --exclude=SC1090,SC1091 \
+    --exclude=SC1090,SC1091,SC1071 \
   {} +
 
 shellcheck \

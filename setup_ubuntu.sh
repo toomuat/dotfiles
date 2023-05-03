@@ -14,12 +14,14 @@ sudo ln -s /usr/share/doc/git/contrib/diff-highlight/diff-highlight \
 
 # zplug
 curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-source ~/".zshrc"
-zplug install
+# source ~/".zshrc"
+# zplug install
 
 # fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-yes ~/.fzf/install
+yes | ~/.fzf/install > /dev/null &
+yes_pid=$!
+wait $yes_pid
 
 # Neovim
 # wget https://github.com/neovim/neovim/releases/download/v0.8.2/nvim-linux64.deb && \
@@ -34,13 +36,13 @@ wget https://github.com/neovim/neovim/releases/download/v0.9.0/nvim-linux64.tar.
 # Packer
 git clone --depth 1 https://github.com/wbthomason/packer.nvim\
  ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-# Run PackerIntall in Neovim
+# Run :PackerInstall in Neovim
 
 # NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-source ~/".zshrc"
-nvm install node # "node" is an alias for the latest version
-nvm install-latest-npm
+# source ~/".zshrc"
+# nvm install node # "node" is an alias for the latest version
+# nvm install-latest-npm
 
 # Docker
 sudo apt-get install -y \
@@ -59,7 +61,3 @@ echo \
 # Install Docker Engine
 sudo apt update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-
-
-
