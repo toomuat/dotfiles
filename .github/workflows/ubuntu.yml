@@ -13,4 +13,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Lint shell files
-        run: ./lint_shell.sh
+        run: |
+          chmod +x lint_shell.sh
+          bash ./lint_shell.sh
