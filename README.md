@@ -3,7 +3,7 @@
 ## Usage
 
 ```bash
-$ bash -c "$(curl -fsSL https://raw.githubusercontent.com/toomuat/dotfiles/main/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/toomuat/dotfiles/main/install.sh)"
 ```
 
 ### LICENSE

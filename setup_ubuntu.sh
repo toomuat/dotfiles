@@ -1,8 +1,5 @@
 #!/bin/bash
 
-echo ubuntu
-exit 0
-
 sudo apt update
 sudo apt upgrade -y
 
