@@ -16,7 +16,7 @@ ts.setup {
     "php",
     "json",
     "yaml",
-    "swift",
+--    "swift",
     "bash",
     "c",
     "cpp",

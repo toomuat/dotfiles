@@ -72,6 +72,7 @@ alias gcm="git commit -m"
 alias gc="git clone"
 alias gch="git checkout"
 alias gb="git branch"
+alias gf="git fetch"
 alias gp="git push"
 alias gpo="git push origin"
 alias gpom="git push origin main"
@@ -154,7 +155,7 @@ search() {
     return 1
   fi
 
-  man "$1" 2>/dev/null || "${BROWSER} http://www.google.com/search?q=\"$1\""
+  man "$1" 2>/dev/null || "${BROWSER}" "http://www.google.com/search?q=\"$1\""
 }
 
 sqlcsv() {
@@ -223,7 +224,6 @@ rprompt-git-current-branch() {
   local branch_name st branch_status
 
   if [ ! -e ".git" ]; then
-    echo "not git"
     return
   fi
 
@@ -257,7 +257,7 @@ RPROMPT="$(rprompt-git-current-branch)"
 
 # https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 fancy-ctrl-z () {
-  if [[ $#BUFFER -eq 0 ]]; then
+  if [[ $(($#BUFFER)) -eq 0 ]]; then
     BUFFER="fg"
     zle accept-line
   else
@@ -419,7 +419,7 @@ fgf() {
     enter) ;;
     ctrl-c) return ;;
     esc) return ;;
-    *) echo $? ;;
+    *) ;;
   esac
 
   file_lists=$(git diff --name-only "${commit_id}")

@@ -12,4 +12,6 @@ find . \
     --exclude=SC1090,SC1091 \
   {} +
 
-shellcheck --exclude=SC1090,SC2148,SC2034,SC2153 .zshrc
+shellcheck \
+  --exclude=SC1090,SC1091,SC2034,SC2148,SC2153,SC2155 \
+  .zshrc
