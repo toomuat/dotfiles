@@ -12,3 +12,5 @@
 (( ${+commands[gfind]} )) && alias find='gfind'
 (( ${+commands[gdirname]} )) && alias dirname='gdirname'
 (( ${+commands[gxargs]} )) && alias xargs='gxargs'
+
+export PATH="/usr/local/sbin:$PATH"
