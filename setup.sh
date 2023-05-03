@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DOTFILES_PATH="${DOTFILES_PATH:-${HOME}/dotfiles}"
+
 if [[ "$OSTYPE" == "darwin"* ]]; then
   bash "${DOTFILES_PATH}"/setup_mac.sh
 elif [[ "$(uname -r)" =~ "microsoft" ]] ||
