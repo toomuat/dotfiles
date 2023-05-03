@@ -1,11 +1,12 @@
-if [[ "$OSTYPE" == "darwin"* ]]; then
+if [[ "${OSTYPE}" == "darwin"* ]]; then
   source ~/.mac.zshrc
 elif [[ "$(uname -r)" =~ "microsoft" ]]; then
   source ~/.wsl.zshrc
 fi
 
 export LANG=C.UTF-8
-export DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0.0
+nameserver=$(grep nameserver /etc/resolv.conf | awk '{print $2}')
+export DISPLAY="${nameserver}:0.0"
 export EDITOR=/usr/local/bin/nvim
 export LS_COLORS="rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=01;34:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lz=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.axv=01;35:*.anx=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.axa=00;36:*.oga=00;36:*.spx=00;36:*.xspf=00;36:"
 export LESS=" -g -i -M -R -S -W -z-4 -x4 -Q -j10"
@@ -27,7 +28,6 @@ export PATH=$PATH:$HOME/.cargo/bin
 alias agg="ag -s --pager 'less -R'"
 alias c="code"
 alias ca="bat"
-alias cdd="cd $(fd -d 1 -t d -I -L -E .git | fzf)"
 alias chx="chmod +x"
 alias dt="dutree"
 alias f="fzf"
@@ -42,7 +42,7 @@ alias tm="tmux"
 alias tma="tmux attach"
 alias tmk="tmux kill-server"
 alias v="/usr/local/bin/nvim"
-alias vconf="cd ${NVIM}"
+alias vconf='cd ${NVIM}'
 alias vg="vgrep"
 alias x="exit"
 alias ...="cd ../.."
@@ -64,11 +64,6 @@ alias dpa="docker ps -a"
 alias dr="docker run"
 alias drm="docker rm"
 alias ds="docker start"
-
-alias gh-run="gh workflow run .github/workflows/$workflow --ref $(git branch --show-current)"
-alias gh-watch="gh run list --workflow=$workflow | grep $(git branch --show-current) | cut -f 7 | head -n 1 | xargs gh run watch"
-alias gh-view="gh run list --workflow=$workflow | grep $(git branch --show-current) | cut -f 7 | head -n 1 | xargs gh run view"
-alias gh-log="gh run list --workflow=$workflow | grep $(git branch --show-current) | cut -f 7 | head -n 1 | xargs gh run view --log"
 
 alias g="git"
 alias ga="git add"
@@ -98,7 +93,7 @@ alias gsl="git stash list"
 alias grl="git reflog"
 alias gls="git ls-files"
 alias glt="git ls-tree"
-alias gfile="git diff-tree --no-commit-id --name-only -r $1"
+alias gfile="git diff-tree --no-commit-id --name-only -r"
 
 zstyle ':completion:*:default' menu select=2
 # Enable case-insensitive completion but distinguish uppercase input
@@ -121,11 +116,11 @@ CYAN="%{\e[38;5;080m%}"
 USER_NAME=%n
 CURRENT_DIR=%C
 RESET="%{\e[0m%}"
-PROMPT=$"%{\e[38;5;118m%}[%{\e[0m%}%{\e[38;5;190m%}%n%{\e[0m%}:%{\e[38;5;080m%}%C%{\e[0m%}%{\e[38;5;118m%}]%{\e[0m%}$ "
+PROMPT=$'%{\e[38;5;118m%}[%{\e[0m%}%{\e[38;5;190m%}%n%{\e[0m%}:%{\e[38;5;080m%}%C%{\e[0m%}%{\e[38;5;118m%}]%{\e[0m%}$ '
 
 cdls() {
   if [[ -d "$1" ]]; then
-    cd "$1"
+    cd "$1" || return
     ls
   else
     echo "$1 is not a valid directory"
@@ -134,8 +129,8 @@ cdls() {
 
 mcd() {
   if [[ -d "$1" ]]; then
-    mkdir -p $1
-    cd $1
+    mkdir -p "$1"
+    cd "$1" || return
   fi
 }
 
@@ -146,21 +141,26 @@ backup() {
 }
 
 gfind() {
-  find / -iname $@ 2>/dev/null
+  find / -iname "$@" 2>/dev/null
 }
 
 lfind() {
-  find . -iname $@ 2>/dev/null
+  find . -iname "$@" 2>/dev/null
 }
 
 search() {
-  man $@ 2>/dev/null || $BROWSER "http://www.google.com/search?q=$@"
+  if [[ $# -ne 1 ]]; then
+    echo "Usage: search <word>"
+    return 1
+  fi
+
+  man "$1" 2>/dev/null || "${BROWSER} http://www.google.com/search?q=\"$1\""
 }
 
 sqlcsv() {
   if [ $# -lt 2 ]
   then
-    echo "USAGE: sqlcsv [filename.csv] [SQL]"
+    echo "Usage: sqlcsv [filename.csv] [SQL]"
     echo "In the SQL, refer to the data sourse as [filename]"
   else
     filename="$1"
@@ -172,14 +172,16 @@ sqlcsv() {
     dataname=${filename%????}
     sql_query="$2"
     sqlite3 :memory: -cmd ".mode csv" \
-      -cmd '.import "${filename}" "${dataname}"' \
-      -cmd ${sql_query}
+      -cmd ".import ${filename} ${dataname}" \
+      -cmd "${sql_query}"
   fi
 }
 
 # Cut $1 column
 col() {
-  awk -v col=$1 "{print ${col}}"
+  var_column="$1"
+  awk "{print ${var_column}}"
+  # awk -v col="$1" "{print ${col}}"
 }
 
 # curlsh : Safer curl
@@ -187,56 +189,59 @@ curlsh() {
   local file
 
   file=$(mktemp -t curlshXXXX) || { echo "Failed creating file"; return; }
-  curl -s "$1" > ${file} || { echo "Failed to curl file"; return; }
-  ${EDITOR} ${file} || { echo "Editor quit with error code"; return; }
-  sh ${file};
-  rm ${file};
+  curl -s "$1" > "${file}" || { echo "Failed to curl file"; return; }
+  "${EDITOR}" "${file}" || { echo "Editor quit with error code"; return; }
+  sh "${file}";
+  rm "${file}";
 }
 
-rc(){
+rc() {
   local filepath="$1"
   local extension="${filepath##*.}"
   if [[ ! "${extension}" == "rs" ]]; then
     return 1
-  else
+  fi
 
-  local name=$(basename $1 .rs)
-  rustc $@
+  local name
+
+  name=$(basename "$1" .rs)
+  rustc "${filepath}"
   ./"${name}"
   rm "${name}"
 }
 
-bib(){
-  platex $1
-  pbibtex $(basename $1 .tex)
-  platex $1
-  platex $1
-  #platex $1
-  dvipdfmx $(basename $1 .tex)
+bib() {
+  platex "$1"
+  pbibtex "$(basename "$1" .tex)"
+  platex "$1"
+  platex "$1"
+  #platex "$1"
+  dvipdfmx "$(basename "$1" .tex)"
 }
 
 rprompt-git-current-branch() {
   local branch_name st branch_status
 
-  if [ ! -e  ".git" ]; then
+  if [ ! -e ".git" ]; then
+    echo "not git"
     return
   fi
 
-  branch_name=`git rev-parse --abbrev-ref HEAD 2> /dev/null`
-  st=`git status 2> /dev/null`
-  if [[ -n `echo "$st" | grep "^nothing to"` ]]; then
+  branch_name=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
+  st=$(git status 2> /dev/null)
+  if echo "${st}" | grep -q "^nothing to"; then
     # Displays green if all files are committed and clean
     branch_status="%F{green}"
-  elif [[ -n `echo "$st" | grep "^Untracked files"` ]]; then
+  elif echo "${st}" | grep -q "^Untracked files"; then
     # Displays red if there are untracked files not managed by git
     branch_status="%F{red}?"
-  elif [[ -n `echo "$st" | grep "^Changes not staged for commit"` ]]; then
+  elif echo "${st}" | grep -q "^Changes not staged for commit"; then
     # Displays red if there are files added to the repo but not staged
     branch_status="%F{red}+"
-  elif [[ -n `echo "$st" | grep "^Changes to be committed"` ]]; then
+  elif echo "${st}" | grep -q "^Changes to be committed"; then
     # Displays yellow if there are changes to be committed
     branch_status="%F{yellow}!"
-  elif [[ -n `echo "$st" | grep "^rebase in progress"` ]]; then
+  elif echo "${st}" | grep -q "^rebase in progress"; then
     # Displays red with an exclamation point if there is a conflict
     echo "%F{red}!(no branch)"
     return
@@ -248,7 +253,7 @@ rprompt-git-current-branch() {
   echo "${branch_status}[$branch_name]%f"
 }
 
-RPROMPT='`rprompt-git-current-branch`'
+RPROMPT="$(rprompt-git-current-branch)"
 
 # https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
 fancy-ctrl-z () {
@@ -263,14 +268,14 @@ fancy-ctrl-z () {
 
 delete_until_slash() {
   # Get the current cursor position
-  local cur_pos=$(echo $CURSOR)
+  local cur_pos="${CURSOR}"
   # Get the left side string from the current cursor position
   local left_str=${BUFFER[1,${cur_pos}]}
   # Search for the position where "/" appears
   local delete_word_len=${#${left_str##*\/}}
-  local slash_pos=$(( ${#left_str} - ${delete_word_len} - 1 ))
+  # local slash_pos=$(( "${#left_str}" - "${delete_word_len}" - 1 ))
   # Delete the string up to the position where "/" appears
-  BUFFER=${BUFFER[1,$((cur_pos-delete_word_len))]}$RBUFFER
+  BUFFER="${BUFFER[1,$((cur_pos-delete_word_len))]}${RBUFFER}"
   # Move the cursor to the position where "/" appears
   CURSOR=$((cur_pos-delete_word_len))
 }
@@ -282,19 +287,19 @@ RESET="\e[0m"
 
 man() {
   env \
-    LESS_TERMCAP_mb=$(printf "${RED}")   \
-    LESS_TERMCAP_md=$(printf "${RED}")   \
-    LESS_TERMCAP_me=$(printf "${RESET}")      \
-    LESS_TERMCAP_se=$(printf "${RESET}")      \
-    LESS_TERMCAP_so=$(printf "${YELLOW}")  \
-    LESS_TERMCAP_ue=$(printf "${RESET}")      \
-    LESS_TERMCAP_us=$(printf "${RED_BOLD}") \
+    LESS_TERMCAP_mb="$(printf '%s' "${RED}")" \
+    LESS_TERMCAP_md="$(printf '%s' "${RED}")" \
+    LESS_TERMCAP_me="$(printf '%s' "${RESET}")" \
+    LESS_TERMCAP_se="$(printf '%s' "${RESET}")" \
+    LESS_TERMCAP_so="$(printf '%s' "${YELLOW}")" \
+    LESS_TERMCAP_ue="$(printf '%s' "${RESET}")" \
+    LESS_TERMCAP_us="$(printf '%s' "${RED_BOLD}")" \
     man "$@"
 }
 
 gn() {
   git log --all --reverse --pretty=%H | \
-    grep -A1 $(git rev-parse HEAD) | \
+    grep -A1 "$(git rev-parse HEAD)" | \
     tail -1 | \
     xargs git checkout
 }
@@ -312,7 +317,7 @@ fbr() {
   branches=$(git branch --all | grep -v HEAD) &&
     branch=$(echo "${branches}" |
     fzf-tmux -d $(( 2 + $(wc -l <<< "${branches}") )) +m) &&
-    git checkout $(echo "${branch}" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
+    git checkout "$(echo "${branch}" | sed 's/.* //' | sed 's#remotes/[^/]*/##')"
 }
 
 # fshow - git commit browser (enter for show, ctrl-d for diff)
@@ -330,10 +335,10 @@ fshow() {
     shas=$(sed "1,2d;s/^[^a-z0-9]*//;/^$/d" <<< "${out}" | awk "{print $1}")
     [ -z "${shas}" ] && continue
     if [ "${k}" = ctrl-d ]; then
-      git diff --color=always ${shas} | cat
+      git diff --color=always "${shas}" | cat
     else
       for sha in ${shas}; do
-        git show --color=always ${sha} | cat
+        git show --color=always "${sha}" | cat
       done
     fi
   done
@@ -341,7 +346,9 @@ fshow() {
 
 # fzf-z-search : Change directory from history
 fzf-z-search() {
-  local res=$(z | sort -rn | cut -c 12- | fzf)
+  local res
+
+  res=$(z | sort -rn | cut -c 12- | fzf)
   if [ -n "$res" ]; then
     BUFFER+="cd $res"
     zle accept-line
@@ -358,7 +365,7 @@ fcat (){
   if [ $# = 0 ];then
     selected=$(fd --color=always -t f | fzf)
   else
-    if [ -f $0 ]; then
+    if [ -f "$0" ]; then
       selected=$1
     else
       selected=$(fd --color=always -t f | \
@@ -368,7 +375,7 @@ fcat (){
 
   if [ -n "${selected}" ];then
     print -s "bat ${selected}"
-    bat ${selected}
+    bat "${selected}"
   else
     # echo "No file is selected"
     false
@@ -387,7 +394,7 @@ fcd() {
   local dir_name
 
   dir_name=$(fd --type d | fzf) || return
-  cd "${dir_name}"
+  cd "${dir_name}" || return
 }
 
 # fgf: Fuzzy find git file at arbitary commit
@@ -396,7 +403,6 @@ fgf() {
     echo "Not in a git repository."
     return
   fi
-  echo fgf
 
   local reply commit_id file_lists file
 
@@ -416,8 +422,8 @@ fgf() {
     *) echo $? ;;
   esac
 
-  file_lists=$(git diff --name-only ${commit_id})
-  fzf_result=$(echo $file_lists | \
+  file_lists=$(git diff --name-only "${commit_id}")
+  fzf_result=$(echo "${file_lists}" | \
     fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort \
       --expect=enter,ctrl-c,esc)
 
@@ -427,23 +433,79 @@ fgf() {
   case "${reply}" in
     enter) ;;
     ctrl-c) return ;;
-    esc) fgf; return ;;
+    esc) fgf "$@"; return ;;
     *) echo $? ;;
   esac
 
-  echo ${commit_id} ${file}
-  git show ${commit_id}:${file}
+  echo "${commit_id} ${file}"
+  git show "${commit_id}":"${file}"
 }
 
 # fga : Preview modified file
 fga() {
-  local modified_files=$(git status --short | awk "{if ($1 == "M") {print $2}}") &&
-  local selected_files=$(echo "${modified_files}" | fzf -m)
+  local modified_files selected_files
+  modified_files=$(git status --short | awk "{if ($1 == 'M') {print $2}}") &&
+    selected_files=$(echo "${modified_files}" | fzf -m)
+  echo "${selected_files}"
 }
 
 # fpre : preview file of current directory
 fpre() {
   fd --type f --hidden --follow --exclude .git | fzf
+}
+
+
+
+gh-run() {
+  if [ $# != 1 ]; then
+    echo "Usage: gh-run <workflow>"
+    return 1
+  fi
+
+  workflow="$1"
+  gh workflow run .github/workflows/"${workflow}" --ref "$(git branch --show-current)"
+}
+
+gh-watch() {
+  if [ $# != 1 ]; then
+    echo "Usage: gh-watch <workflow>"
+    return 1
+  fi
+
+  workflow="$1"
+  gh run list --workflow="${workflow}" | \
+    grep "$(git branch --show-current)" | \
+    cut -f 7 | \
+    head -n 1 | \
+    xargs gh run watch
+}
+
+gh-view() {
+  if [ $# != 1 ]; then
+    echo "Usage: gh-view <workflow>"
+    return 1
+  fi
+
+  workflow="$1"
+  gh run list --workflow="${workflow}" | \
+    grep "$(git branch --show-current)" | \
+    cut -f 7 | \
+    head -n 1 | \
+    xargs gh run view
+}
+
+gh-log() {
+  if [ $# != 1 ]; then
+    echo "Usage: gh-log <workflow>"
+    return 1
+  fi
+
+  workflow="$1"
+  gh run list --workflow="${workflow}" | \
+    grep "$(git branch --show-current)" | \
+    cut -f 7 | \
+    head -n 1 | \
+    xargs gh run view --log
 }
 
 # `binkey -L` to show bindings
