@@ -1,9 +1,9 @@
 DOTFILES_PATH="${DOTFILES_PATH:-${HOME}/dotfiles}"
 
 if [[ "${OSTYPE}" == "darwin"* ]]; then
-  source "${DOTFILES_PATH}"/.mac.zshrc
+  source "${DOTFILES_PATH}"/zsh/mac.sh
 elif [[ "$(uname -r)" =~ "microsoft" ]]; then
-  source "${DOTFILES_PATH}"/.wsl.zshrc
+  source "${DOTFILES_PATH}"/zsh/wsl.sh
 fi
 
 source "${DOTFILES_PATH}"/zsh/alias.sh
