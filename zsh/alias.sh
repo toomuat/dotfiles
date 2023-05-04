@@ -18,6 +18,7 @@ alias v="/usr/local/bin/nvim"
 alias vconf='cd ${NVIM}'
 alias vg="vgrep"
 alias x="exit"
+alias ..="cd .."
 alias ...="cd ../.."
 alias ....="cd ../../.."
 alias .....="cd ../../../.."
