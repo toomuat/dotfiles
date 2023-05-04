@@ -22,4 +22,4 @@ fi
 git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
 
 /bin/bash "${DOTFILES_PATH}"/link.sh
-/bin/bash "${DOTFILES_PATH}"/setup.sh
+/bin/bash "${DOTFILES_PATH}"/setup/setup.sh
