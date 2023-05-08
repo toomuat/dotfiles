@@ -299,7 +299,7 @@ fpre() {
 }
 
 gh-run() {
-  if [ $# != 1 ]; then
+  if [[ $# != 1 ]]; then
     echo "Usage: gh-run <workflow>"
     return 1
   fi
@@ -309,7 +309,7 @@ gh-run() {
 }
 
 gh-watch() {
-  if [ $# != 1 ]; then
+  if [[ $# != 1 ]]; then
     echo "Usage: gh-watch <workflow>"
     return 1
   fi
@@ -323,7 +323,7 @@ gh-watch() {
 }
 
 gh-view() {
-  if [ $# != 1 ]; then
+  if [[ $# != 1 ]]; then
     echo "Usage: gh-view <workflow>"
     return 1
   fi
@@ -337,7 +337,7 @@ gh-view() {
 }
 
 gh-log() {
-  if [ $# != 1 ]; then
+  if [[ $# != 1 ]]; then
     echo "Usage: gh-log <workflow>"
     return 1
   fi
@@ -348,4 +348,16 @@ gh-log() {
     cut -f 7 | \
     head -n 1 | \
     xargs gh run view --log
+}
+
+ghv() {
+  local repo
+
+  repo=$(gh repo list "$1" --json nameWithOwner -q '.[].nameWithOwner' | fzf)
+
+  if [[ -z "${repo}" ]]; then
+    return
+  fi
+
+  gh repo view --web "${repo}"
 }
