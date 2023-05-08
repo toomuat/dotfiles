@@ -49,8 +49,3 @@ bindkey "\e[3~" delete-char
 zle -N fancy-ctrl-z
 zle -N fzf-z-search
 zle -N delete_until_slash
-
-# NVM
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "${NVM_DIR}/nvm.sh" ] && \. "${NVM_DIR}/nvm.sh" # This loads nvm
-

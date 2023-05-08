@@ -8,7 +8,7 @@ cdls() {
 }
 
 mcd() {
-  if [[ -d "$1" ]]; then
+  if [[ ! -d "$1" ]]; then
     mkdir -p "$1"
     cd "$1" || return
   fi
