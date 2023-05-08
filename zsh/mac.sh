@@ -15,6 +15,7 @@
 
 export PATH="/usr/local/sbin:$PATH"
 export PATH=$PATH:/opt/homebrew/share/git-core/contrib/diff-highlight
+export PATH=$PATH:/opt/homebrew/bin/nvim
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 

@@ -49,3 +49,6 @@ bindkey "\e[3~" delete-char
 zle -N fancy-ctrl-z
 zle -N fzf-z-search
 zle -N delete_until_slash
+
+autoload -U compinit
+compinit
