@@ -1,4 +1,4 @@
-export LANG=C.UTF-8
+#export LANG=C.UTF-8
 nameserver=$(grep nameserver /etc/resolv.conf | awk '{print $2}')
 export DISPLAY="${nameserver}:0.0"
 export EDITOR=/usr/local/bin/nvim
@@ -12,3 +12,4 @@ export NVIM=$HOME/.config/nvim
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 export GOPATH=$HOME/.go
 export PATH=$PATH:$HOME/.cargo/bin
+export PATH=$PATH:/usr/local/bin

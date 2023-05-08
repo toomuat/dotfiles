@@ -14,3 +14,6 @@
 (( ${+commands[gxargs]} )) && alias xargs='gxargs'
 
 export PATH="/usr/local/sbin:$PATH"
+export PATH=$PATH:/opt/homebrew/share/git-core/contrib/diff-highlight
+
+eval "$(/opt/homebrew/bin/brew shellenv)"

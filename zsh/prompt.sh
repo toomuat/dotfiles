@@ -11,6 +11,7 @@ rprompt-git-current-branch() {
   local branch_name st branch_status
 
   if [ ! -e ".git" ]; then
+    RPROMPT=""
     return
   fi
 
@@ -37,7 +38,11 @@ rprompt-git-current-branch() {
     branch_status="%F{blue}"
   fi
   # Displays the branch name with color
-  echo "${branch_status}[$branch_name]%f"
+  # echo "${branch_status}[$branch_name]%f"
+  RPROMPT="${branch_status}[$branch_name]%f"
 }
 
 RPROMPT="$(rprompt-git-current-branch)"
+
+autoload -Uz add-zsh-hook
+add-zsh-hook chpwd rprompt-git-current-branch
