@@ -60,7 +60,8 @@ sqlcsv() {
 # Cut $1 column
 col() {
   var_column="$1"
-  awk "{print ${var_column}}"
+  # shellcheck disable=SC2027,SC2086
+  awk "{print $"${var_column}"}"
   # awk -v col="$1" "{print ${col}}"
 }
 

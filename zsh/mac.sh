@@ -16,6 +16,11 @@
 export PATH="/usr/local/sbin:$PATH"
 export PATH=$PATH:/opt/homebrew/share/git-core/contrib/diff-highlight
 export PATH=$PATH:/opt/homebrew/bin/nvim
+export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
+
+alias br="brew"
 
 eval "$(/opt/homebrew/bin/brew shellenv)"
 

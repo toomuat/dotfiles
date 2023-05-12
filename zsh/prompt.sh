@@ -45,4 +45,4 @@ rprompt-git-current-branch() {
 RPROMPT="$(rprompt-git-current-branch)"
 
 autoload -Uz add-zsh-hook
-add-zsh-hook chpwd rprompt-git-current-branch
+add-zsh-hook precmd rprompt-git-current-branch

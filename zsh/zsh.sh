@@ -17,6 +17,15 @@ setopt appendhistory
 setopt sharehistory
 # Immediately append to the history file, not just when a term is killed
 setopt incappendhistory
+setopt auto_cd
+setopt auto_pushd
+setopt pushd_ignore_dups
+setopt auto_param_slash
+setopt list_types
+setopt complete_in_word
+setopt no_beep
+setopt auto_param_keys
+setopt hist_ignore_all_dups
 
 zstyle ':completion:*:default' menu select=2
 # Enable case-insensitive completion but distinguish uppercase input
@@ -37,9 +46,9 @@ zplug load --verbose > /dev/null
 # `binkey -L` to show bindings
 bindkey -e
 bindkey "^f" forward-char
-bindkey "^n" fzf-z-search
+bindkey "^;" fzf-z-search
 bindkey "^o" down-line-or-history
-bindkey "^r" history-incremental-pattern-search-backward
+# bindkey "^r" history-incremental-pattern-search-backward
 bindkey "^s" history-incremental-pattern-search-forward
 bindkey "^X" delete_until_slash
 bindkey "^Z" fancy-ctrl-z

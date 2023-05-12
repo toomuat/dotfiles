@@ -9,7 +9,7 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 
 export NVIM=$HOME/.config/nvim
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+# export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 export GOPATH=$HOME/.go
 export PATH=$PATH:$HOME/.cargo/bin
 export PATH=$PATH:/usr/local/bin
