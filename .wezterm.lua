@@ -2,7 +2,7 @@ local wezterm = require("wezterm")
 local act = wezterm.action
 
 local config = {
-  leader = { key = 'j', mods = 'CTRL', timeout_milliseconds = 1000 },
+  leader = { key = 'b', mods = 'CTRL', timeout_milliseconds = 1000 },
   keys = {
     -- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
     { key = "a", mods = "LEADER|CTRL",  action=act{SendString="\x01"}},
@@ -114,8 +114,8 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
   config.default_prog = {"wsl.exe"}
   config.default_cwd = "/home/tom"
 else
-  table.insert(config.launch_menu, { label = "zsh", args = {"zsh", "-l"} })
-  table.insert(config.launch_menu, { label = "bash", args = {"bash", "-l"} })
+  -- table.insert(config.launch_menu, { label = "zsh", args = {"zsh", "-l"} })
+  -- table.insert(config.launch_menu, { label = "bash", args = {"bash", "-l"} })
 end
 
 return config
