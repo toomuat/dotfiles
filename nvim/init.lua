@@ -1,21 +1,22 @@
 require("base")
 require("highlights")
 require("maps")
-require("plugins")
+if not vim.g.vscode then
+  require("plugins")
+else
+end
 
 local has = function(x)
   return vim.fn.has(x) == 1
 end
 local is_linux = has "linux"
-local is_mac = has "macos"
+local is_mac = has "mac"
 local is_win = has "win32"
 
 if is_linux then
   require("linux")
-end
-if is_mac then
+elseif is_mac then
   require("macos")
-end
-if is_win then
+elseif is_win then
   require("windows")
 end

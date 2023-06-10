@@ -31,8 +31,8 @@ null_ls.setup {
     null_ls.builtins.code_actions.shellcheck,
     --null_ls.builtins.code_actions.eslint,
     -- null_ls.builtins.diagnostics.cpplint,
-    null_ls.builtins.diagnostics.eslint_d.with({
-      --null_ls.builtins.diagnostics.eslint.with({
+    -- null_ls.builtins.diagnostics.eslint_d.with({
+    null_ls.builtins.diagnostics.eslint.with({
       diagnostics_format = '[eslint] #{m}\n(#{c})'
     }),
   },

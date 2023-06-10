@@ -1,4 +1,5 @@
 local status, lspkind = pcall(require, "lspkind")
+-- if (status) then return end
 if (not status) then return end
 
 lspkind.init({

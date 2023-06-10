@@ -24,8 +24,8 @@ packer.startup(function(use)
   --   tag = "version_2.2",
   -- }
   use "j-hui/fidget.nvim" -- LSP progress
-  use { "L3MON4D3/LuaSnip", opt = true } -- Snippets
-  use { "saadparwaiz1/cmp_luasnip", opt = true }
+  use "L3MON4D3/LuaSnip" -- Snippets
+  use "saadparwaiz1/cmp_luasnip"
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
@@ -89,6 +89,8 @@ packer.startup(function(use)
   use "lambdalisue/glyph-palette.vim"
   use "nvim-tree/nvim-tree.lua"
   use "nvim-tree/nvim-web-devicons"
+
+  -- use "kristijanhusak/defx-icons"
 
   -- Session
   -- use "rmagatti/session-lens"

@@ -41,10 +41,10 @@ luasnip.add_snippets(nil, {
   -- rust = rust,
 })
 
-vim.keymap.set("i", "<TAB>", "luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'", { noremap = false, silent = true, expr = true })
-vim.keymap.set("i", "<S-TAB>", "<cmd>lua require'luasnip'.jump(-1)<CR>")
-vim.keymap.set("s", "<TAB>", "<cmd>lua require'luasnip'.jump(1)<CR>")
-vim.keymap.set("s", "<S-TAB>", "<cmd>lua require'luasnip'.jump(-1)<CR>")
-vim.keymap.set("i", "<C-E>", "luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'")
-vim.keymap.set("s", "<C-E>", "luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'")
+-- vim.keymap.set("i", "<TAB>", "luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>'", { noremap = false, silent = true, expr = true })
+-- vim.keymap.set("i", "<S-TAB>", "<cmd>lua require'luasnip'.jump(-1)<CR>")
+-- vim.keymap.set("s", "<TAB>", "<cmd>lua require'luasnip'.jump(1)<CR>")
+-- vim.keymap.set("s", "<S-TAB>", "<cmd>lua require'luasnip'.jump(-1)<CR>")
+-- vim.keymap.set("i", "<C-E>", "luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'")
+-- vim.keymap.set("s", "<C-E>", "luasnip#choice_active() ? '<Plug>luasnip-next-choice' : '<C-E>'")
 

@@ -27,6 +27,16 @@ gitsigns.setup {
     -- Actions
     map({ 'n', 'v' }, '<space>hs', ':Gitsigns stage_hunk<CR>')
     map({ 'n', 'v' }, '<space>hr', ':Gitsigns reset_hunk<CR>')
+    map('n', '<space>hS', gs.stage_buffer)
+    map('n', '<space>hu', gs.undo_stage_hunk)
+    map('n', '<space>hR', gs.reset_buffer)
+    map('n', '<space>hp', gs.preview_hunk)
+    map('n', '<space>hb', function() gs.blame_line{full=true} end)
+    map('n', '<space>tb', gs.toggle_current_line_blame)
+    map('n', '<space>hd', gs.diffthis)
+    map('n', '<space>hD', function() gs.diffthis('~') end)
+    map('n', '<space>td', gs.toggle_deleted)
+
     map('n', '<space>hp', gs.preview_hunk)
   end
 }

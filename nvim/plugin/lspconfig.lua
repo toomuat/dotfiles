@@ -108,7 +108,11 @@ nvim_lsp.jdtls.setup {
   on_attach = on_attach,
 }
 
-nvim_lsp.jsonls.setup {
+-- nvim_lsp.jsonls.setup {
+--   on_attach = on_attach,
+-- }
+
+nvim_lsp.graphql.setup {
   on_attach = on_attach,
 }
 
