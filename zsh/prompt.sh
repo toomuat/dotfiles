@@ -10,10 +10,16 @@ PROMPT=$'%{\e[38;5;118m%}[%{\e[0m%}%{\e[38;5;190m%}%n%{\e[0m%}:%{\e[38;5;080m%}%
 rprompt-git-current-branch() {
   local branch_name st branch_status
 
-  if [ ! -e ".git" ]; then
+  st=$(git status 2>&1)
+  if [ $? -ne 0 ]; then
     RPROMPT=""
     return
   fi
+
+  # if [ ! -e ".git" ]; then
+  #   RPROMPT=""
+  #   return
+  # fi
 
   branch_name=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
   st=$(git status 2> /dev/null)
