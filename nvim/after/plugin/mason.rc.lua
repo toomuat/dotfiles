@@ -12,6 +12,7 @@ lspconfig.setup {
     -- "eslint_d",
     "jdtls",
     "lua_ls",
+    "pyright",
     "rust_analyzer",
     "tailwindcss",
     "terraformls",

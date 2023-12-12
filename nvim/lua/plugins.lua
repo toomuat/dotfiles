@@ -12,18 +12,21 @@ packer.startup(function(use)
     "svrana/neosolarized.nvim",
     requires = { "tjdevries/colorbuddy.nvim" }
   }
-  use "hoob3rt/lualine.nvim" -- Statusline
-  use "onsails/lspkind-nvim" -- vscode-like pictograms
-  use "hrsh7th/cmp-buffer" -- nvim-cmp source for buffer words
-  use "hrsh7th/cmp-nvim-lsp" -- nvim-cmp source for neovim's built-in LSP
-  use "hrsh7th/nvim-cmp" -- Completion
+  use "hoob3rt/lualine.nvim"  -- Statusline
+  use "onsails/lspkind-nvim"  -- vscode-like pictograms
+  use "hrsh7th/cmp-buffer"    -- nvim-cmp source for buffer words
+  use "hrsh7th/cmp-nvim-lsp"  -- nvim-cmp source for neovim's built-in LSP
+  use "hrsh7th/nvim-cmp"      -- Completion
   use "neovim/nvim-lspconfig" -- LSP
-  use "glepnir/lspsaga.nvim" -- LSP UIs
+  use "glepnir/lspsaga.nvim"  -- LSP UIs
   -- use {
   --   "glepnir/lspsaga.nvim", -- LSP UIs
   --   tag = "version_2.2",
   -- }
-  use "j-hui/fidget.nvim" -- LSP progress
+  use {
+    "j-hui/fidget.nvim",  -- LSP progress
+    tag = "legacy"
+  }
   use "L3MON4D3/LuaSnip" -- Snippets
   use "saadparwaiz1/cmp_luasnip"
   use {
@@ -61,7 +64,7 @@ packer.startup(function(use)
 
   -- LSP
   use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-  use "munifTanjim/prettier.nvim" -- Prettier plugin for Neovim's built-in LSP client
+  use "munifTanjim/prettier.nvim"       -- Prettier plugin for Neovim's built-in LSP client
   use "williamboman/mason.nvim"
   use "williamboman/mason-lspconfig.nvim"
   use "simrat39/rust-tools.nvim"
@@ -71,6 +74,7 @@ packer.startup(function(use)
     requires = { "nvim-lua/plenary.nvim" }
   }
 
+  -- Git
   use "lewis6991/gitsigns.nvim"
   use "dinhhuy258/git.nvim"
   use "akinsho/git-conflict.nvim"

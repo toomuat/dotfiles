@@ -9,11 +9,6 @@ nvim_tree.setup({
   sort_by = "case_sensitive",
   view = {
     adaptive_size = true,
-    mappings = {
-      list = {
---        { key = "u", action = "dir_up" },
-      },
-    },
   },
   renderer = {
     group_empty = true,
@@ -24,5 +19,6 @@ nvim_tree.setup({
 })
 
 vim.keymap.set("n", "<space>e", ":NvimTreeToggle<CR>")
+vim.keymap.set("n", "<space>E", ":NvimTreeFindFile<CR>")
 -- vim.keymap.set("n", "<space>E", ":<C-u>Fern . -drawer -reveal=%<CR>")
 

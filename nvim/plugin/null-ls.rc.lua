@@ -26,7 +26,8 @@ null_ls.setup {
       filetypes = { "html", "css", "yaml", "markdown", "json" },
     }),
     null_ls.builtins.formatting.shfmt, -- shell script formatting
-    null_ls.builtins.formatting.eslint_d,
+    -- null_ls.builtins.formatting.eslint_d,
+    null_ls.builtins.formatting.prettier,
     null_ls.builtins.formatting.autopep8,
     null_ls.builtins.code_actions.shellcheck,
     --null_ls.builtins.code_actions.eslint,
