@@ -365,9 +365,9 @@ ghv() {
 
 ghp() {
   selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
-  pr_number=$(echo ${selected_pr} | awk '{print $1}')
-  if [ ! -z "${pr_number}" ]; then
-    gh co ${pr_number}
+  pr_number=$(echo "${selected_pr}" | awk '{print $1}')
+  if [ -n "${pr_number}" ]; then
+    gh co "${pr_number}"
   else
     echo "PRが選択されませんでした"
   fi
@@ -375,9 +375,9 @@ ghp() {
 
 ghpv() {
   selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
-  pr_number=$(echo ${selected_pr} | awk '{print $1}')
-  if [ ! -z "${pr_number}" ]; then
-    gh pr view -w ${pr_number}
+  pr_number=$(echo "${selected_pr}" | awk '{print $1}')
+  if [ -n "${pr_number}" ]; then
+    gh pr view -w "${pr_number}"
   else
     echo "PRが選択されませんでした"
   fi

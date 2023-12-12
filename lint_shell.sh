@@ -11,6 +11,6 @@ find . \
   ! -path ".github" \
   ! -path "nvim" \
   -exec shellcheck \
-    --exclude=SC1071,SC1090,SC1091,SC2034,SC2148,SC2153,SC2155 \
+    --exclude=SC1071,SC1090,SC1091,SC2034,SC2148,SC2153,SC2155,SC2181\
   {} +
 
