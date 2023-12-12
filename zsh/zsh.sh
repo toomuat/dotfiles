@@ -61,3 +61,6 @@ zle -N delete_until_slash
 
 autoload -U compinit
 compinit
+
+# bun completions
+[ -s "/opt/homebrew/Cellar/bun/0.8.1/share/zsh/site-functions/_bun" ] && source "/opt/homebrew/Cellar/bun/0.8.1/share/zsh/site-functions/_bun"
