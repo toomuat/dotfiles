@@ -24,7 +24,7 @@ vim.opt.smarttab = true
 vim.opt.breakindent = true
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
-vim.opt.wrap = false -- No wrap lines
+vim.opt.wrap = false         -- No wrap lines
 vim.opt.backspace = { "start", "eol", "indent" }
 vim.opt.path:append { "**" } -- Finding files - Search down into subfolders
 vim.opt.wildignore:append { "*/node_modules/*" }
@@ -67,3 +67,10 @@ vim.api.nvim_create_autocmd({ "BufReadPost" }, {
     vim.api.nvim_exec('silent! normal! g`"zv', false)
   end,
 })
+
+vim.api.nvim_exec([[
+  autocmd FileType go setlocal expandtab
+  autocmd FileType go setlocal shiftwidth=8
+  autocmd FileType go setlocal softtabstop=8
+  autocmd FileType go setlocal tabstop=8
+]], false)
