@@ -9,6 +9,8 @@ lspconfig.setup {
   ensure_installed = {
     "bashls",
     "clangd",
+    "docker_compose_language_service",
+    "dockerls",
     -- "eslint_d",
     "jdtls",
     "lua_ls",
