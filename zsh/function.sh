@@ -382,3 +382,7 @@ ghpv() {
     echo "PRが選択されませんでした"
   fi
 }
+
+ghco() {
+  gh copilot suggest -t shell "$@"
+}
