@@ -7,25 +7,18 @@ local protocol = require('vim.lsp.protocol')
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
+local on_attach = function(client, _bufnr)
   if client.name == "tsserver" then
     client.server_capabilities.document_formatting = false
     -- client.resolved_capabilities.document_formatting = false
   end
 
-  -- local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  --Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
   -- Mappings.
   local opts = { noremap = true, silent = true }
   vim.keymap.set('n', 'gj', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  --vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts) -- Use lspsaga
-  --vim.keymap.set('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)       -- Use lspsaga
+  -- vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts) -- Use lspsaga
+  -- vim.keymap.set('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)       -- Use lspsaga
   vim.keymap.set('n', '<space>f', '<cmd>lua vim.lsp.buf.format{ async = true }<CR>', opts)
   vim.keymap.set('n', 'gwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
   vim.keymap.set('n', 'gl', '<cmd>lua print(vim.diagnostic.setloclist())<CR>', opts)
@@ -75,14 +68,14 @@ protocol.CompletionItemKind = {
 
 nvim_lsp.flow.setup {
   on_attach = on_attach,
-  capabilities = capabilities
+  -- capabilities = capabilities
 }
 
 nvim_lsp.tsserver.setup {
   on_attach = on_attach,
   filetypes = { "javascript", "typescript", "typescriptreact", "typescript.tsx", "javascriptreact" },
   cmd = { "typescript-language-server", "--stdio" },
-  capabilities = capabilities
+  -- capabilities = capabilities
 }
 
 nvim_lsp.clangd.setup {
@@ -99,7 +92,6 @@ nvim_lsp.hls.setup {
     haskell = {
       cabalFormattingProvider = "cabalfmt",
       formattingProvider = "cabalfmt"
-      -- formattingProvider = "ormolu"
     }
   }
 }
@@ -148,9 +140,9 @@ nvim_lsp.tflint.setup {
 --   on_attach = on_attach,
 -- }
 
-nvim_lsp.ruby_ls.setup {
-  on_attach = on_attach,
-}
+-- nvim_lsp.ruby_ls.setup {
+--   on_attach = on_attach,
+-- }
 
 nvim_lsp.ocamllsp.setup {
   on_attach = on_attach,

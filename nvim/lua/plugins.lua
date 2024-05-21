@@ -18,13 +18,9 @@ packer.startup(function(use)
   use "hrsh7th/cmp-nvim-lsp"  -- nvim-cmp source for neovim's built-in LSP
   use "hrsh7th/nvim-cmp"      -- Completion
   use "neovim/nvim-lspconfig" -- LSP
-  use "glepnir/lspsaga.nvim"  -- LSP UIs
-  -- use {
-  --   "glepnir/lspsaga.nvim", -- LSP UIs
-  --   tag = "version_2.2",
-  -- }
+  use "nvimdev/lspsaga.nvim"   -- LSP UIs
   use {
-    "j-hui/fidget.nvim",  -- LSP progress
+    "j-hui/fidget.nvim", -- LSP progress
     tag = "legacy"
   }
   use "L3MON4D3/LuaSnip" -- Snippets
@@ -36,8 +32,8 @@ packer.startup(function(use)
   use "RRethy/nvim-treesitter-endwise"
   use "nvim-treesitter/nvim-treesitter-textobjects"
 
-  use "windwp/nvim-autopairs"
-  use "windwp/nvim-ts-autotag"
+  use "windwp/nvim-autopairs"  -- {}, (), "" などのペア文字入力補完
+  use "windwp/nvim-ts-autotag" -- nvim-treesitter の拡張プラグイン。HTMLタグの閉じタグ補完のため
   use "andymass/vim-matchup"
 
   use "nvim-lua/plenary.nvim" -- Common utilities
