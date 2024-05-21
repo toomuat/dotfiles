@@ -98,6 +98,10 @@ ts.setup {
       },
     },
   },
+  ignore_install = {},
+  auto_install = true,
+  sync_install =false,
+  modules = {},
 }
 
 local parser_config = require "nvim-treesitter.parsers".get_parser_configs()
