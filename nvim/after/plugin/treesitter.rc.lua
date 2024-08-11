@@ -41,9 +41,9 @@ ts.setup {
     "yaml",
 --    "swift",
   },
-  autotag = {
-    enable = true,
-  },
+  -- autotag = {
+  --   enable = true,
+  -- },
   endwise = {
     enable = true,
   },
