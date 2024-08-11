@@ -32,6 +32,7 @@ vim.opt.mouse:append('a')
 vim.opt.backup = false
 vim.opt.swapfile = false
 vim.opt.signcolumn = "yes"
+vim.opt.relativenumber = true
 
 -- Undercurl
 vim.cmd([[let &t_Cs = "\e[4:3m"]])
