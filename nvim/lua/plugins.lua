@@ -1,116 +1,162 @@
-local status, packer = pcall(require, "packer")
-if (not status) then
-  print("Packer is not installed")
-  return
-end
-
-vim.cmd [[packadd packer.nvim]]
-
-packer.startup(function(use)
-  use "wbthomason/packer.nvim"
-  use {
+-- lazy.nvimの設定
+return require("lazy").setup({
+  -- カラースキーム
+  {
     "svrana/neosolarized.nvim",
-    requires = { "tjdevries/colorbuddy.nvim" }
-  }
-  use "hoob3rt/lualine.nvim"  -- Statusline
-  use "onsails/lspkind-nvim"  -- vscode-like pictograms
-  use "hrsh7th/cmp-buffer"    -- nvim-cmp source for buffer words
-  use "hrsh7th/cmp-nvim-lsp"  -- nvim-cmp source for neovim's built-in LSP
-  use "hrsh7th/nvim-cmp"      -- Completion
-  use "neovim/nvim-lspconfig" -- LSP
-  use "nvimdev/lspsaga.nvim"   -- LSP UIs
-  use {
-    "j-hui/fidget.nvim", -- LSP progress
+    dependencies = { "tjdevries/colorbuddy.nvim" }
+  },
+
+  -- ステータスライン
+  { "hoob3rt/lualine.nvim" },
+
+  -- LSP関連
+  { "onsails/lspkind-nvim" },  -- vscode-like pictograms
+  { "hrsh7th/cmp-buffer" },    -- nvim-cmp source for buffer words
+  { "hrsh7th/cmp-nvim-lsp" },  -- nvim-cmp source for neovim's built-in LSP
+  { "hrsh7th/nvim-cmp" },      -- Completion
+  { "neovim/nvim-lspconfig" }, -- LSP
+  { "nvimdev/lspsaga.nvim" },   -- LSP UIs
+  {
+    "j-hui/fidget.nvim",       -- LSP progress
     tag = "legacy"
-  }
-  use "L3MON4D3/LuaSnip" -- Snippets
-  use "saadparwaiz1/cmp_luasnip"
-  use {
+  },
+
+  -- スニペット
+  { "L3MON4D3/LuaSnip" },
+  { "saadparwaiz1/cmp_luasnip" },
+
+  -- Treesitter
+  {
     'nvim-treesitter/nvim-treesitter',
-    run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
-  }
-  use "RRethy/nvim-treesitter-endwise"
-  use "nvim-treesitter/nvim-treesitter-textobjects"
+    build = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+  },
+  { "RRethy/nvim-treesitter-endwise" },
+  { "nvim-treesitter/nvim-treesitter-textobjects" },
 
-  use "windwp/nvim-autopairs"  -- {}, (), "" などのペア文字入力補完
-  use "windwp/nvim-ts-autotag" -- nvim-treesitter の拡張プラグイン。HTMLタグの閉じタグ補完のため
-  use "andymass/vim-matchup"
+  -- 自動ペア
+  { "windwp/nvim-autopairs" },  -- {}, (), "" などのペア文字入力補完
+  { "windwp/nvim-ts-autotag" }, -- nvim-treesitter の拡張プラグイン。HTMLタグの閉じタグ補完のため
+  { "andymass/vim-matchup" },
 
-  use "nvim-lua/plenary.nvim" -- Common utilities
-  -- use "kyazdani42/nvim-web-devicons" -- File icons
-  use "nvim-telescope/telescope.nvim"
-  -- use { "nvim-telescope/telescope.nvim", opt = true }
-  use {
+  -- ユーティリティ
+  { "nvim-lua/plenary.nvim" }, -- Common utilities
+
+  -- Telescope
+  { "nvim-telescope/telescope.nvim" },
+  {
     "nvim-telescope/telescope-file-browser.nvim",
-    requires = { "kkharji/sqlite.lua" },
-  }
-  use "nvim-telescope/telescope-frecency.nvim"
-  use "akinsho/nvim-bufferline.lua"
-  use "norcalli/nvim-colorizer.lua"
-  use "folke/zen-mode.nvim"
-  use "akinsho/toggleterm.nvim"
-  --  use "goolord/alpha-nvim"
-  use {
-    'goolord/alpha-nvim',
-    requires = { 'kyazdani42/nvim-web-devicons' },
-    config = function()
-      require 'alpha'.setup(require 'alpha.themes.startify'.config)
-    end
-  }
+    dependencies = { "kkharji/sqlite.lua" },
+  },
+  { "nvim-telescope/telescope-frecency.nvim" },
 
-  -- LSP
-  use 'jose-elias-alvarez/null-ls.nvim' -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
-  use "munifTanjim/prettier.nvim"       -- Prettier plugin for Neovim's built-in LSP client
-  use "williamboman/mason.nvim"
-  use "williamboman/mason-lspconfig.nvim"
-  use "simrat39/rust-tools.nvim"
-  use "mfussenegger/nvim-jdtls"
-  use {
+  -- UI関連
+  { "akinsho/nvim-bufferline.lua" },
+  { "norcalli/nvim-colorizer.lua" },
+  { "folke/zen-mode.nvim" },
+  { "akinsho/toggleterm.nvim" },
+  {
+    'goolord/alpha-nvim',
+    dependencies = { 'kyazdani42/nvim-web-devicons' },
+    config = function()
+      require('alpha').setup(require('alpha.themes.startify').config)
+    end
+  },
+
+  -- LSP拡張
+  { 'jose-elias-alvarez/null-ls.nvim' }, -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
+  { "munifTanjim/prettier.nvim" },       -- Prettier plugin for Neovim's built-in LSP client
+  { "williamboman/mason.nvim" },
+  { "williamboman/mason-lspconfig.nvim" },
+  { "simrat39/rust-tools.nvim" },
+  { "mfussenegger/nvim-jdtls" },
+  {
     "scalameta/nvim-metals",
-    requires = { "nvim-lua/plenary.nvim" }
-  }
+    dependencies = { "nvim-lua/plenary.nvim" }
+  },
 
   -- Git
-  use "lewis6991/gitsigns.nvim"
-  use "dinhhuy258/git.nvim"
-  use "akinsho/git-conflict.nvim"
-  -- use "pwntester/octo.nvim" -- Edit and review GitHub issues and pull requests
+  { "lewis6991/gitsigns.nvim" },
+  { "dinhhuy258/git.nvim" },
+  { "akinsho/git-conflict.nvim" },
+  -- { "pwntester/octo.nvim" }, -- Edit and review GitHub issues and pull requests
 
-  use "ggandor/leap.nvim" -- Motion
-  use "tpope/vim-commentary"
-  use "JoosepAlviste/nvim-ts-context-commentstring"
-  use "tpope/vim-surround"
-  use "tpope/vim-repeat"
+  -- モーション
+  { "ggandor/leap.nvim" },
+  { "tpope/vim-commentary" },
+  { "JoosepAlviste/nvim-ts-context-commentstring" },
+  { "tpope/vim-surround" },
+  { "tpope/vim-repeat" },
 
-  -- Filer
-  use "lambdalisue/fern.vim"
-  use "lambdalisue/nerdfont.vim"
-  use "lambdalisue/fern-renderer-nerdfont.vim"
-  use "lambdalisue/glyph-palette.vim"
-  use "nvim-tree/nvim-tree.lua"
-  use "nvim-tree/nvim-web-devicons"
+  -- ファイラー
+  { "lambdalisue/fern.vim" },
+  { "lambdalisue/nerdfont.vim" },
+  { "lambdalisue/fern-renderer-nerdfont.vim" },
+  { "lambdalisue/glyph-palette.vim" },
+  { "nvim-tree/nvim-tree.lua" },
+  { "nvim-tree/nvim-web-devicons" },
 
-  use "github/copilot.vim"
+  -- Copilot
+  { "github/copilot.vim" },
 
-  -- use "kristijanhusak/defx-icons"
+  -- コードランナー
+  { "CRAG666/code_runner.nvim" },
 
-  -- Session
-  -- use "rmagatti/session-lens"
-  -- use "rmagatti/auto-session"
-
-  -- use "wfxr/minimap.vim"
-  -- use {
+  -- コメントアウトされたプラグイン
+  -- { "kristijanhusak/defx-icons" },
+  -- { "rmagatti/session-lens" },
+  -- { "rmagatti/auto-session" },
+  -- {
   --   "wfxr/minimap.vim",
-  --   run = "cargo install --locked code-minimap",
-  --   -- cmd = {"Minimap", "MinimapClose", "MinimapToggle", "MinimapRefresh", "MinimapUpdateHighlight"},
-  --   -- config = function()
-  --   --   vim.cmd("let g:minimap_width = 9")
-  --   --   vim.cmd("let g:minimap_auto_start = 1")
-  --   --   vim.cmd("let g:minimap_auto_start_win_enter = 1")
-  --   -- end,
-  -- }
-  use "CRAG666/code_runner.nvim"
-  -- use "is0n/jaq-nvim" -- Quickrun for Neovim
-  -- use "hkupty/iron.nvim" -- Interactive REPL
-  -- use "natecraddock/workspaces.nvim"
-end)
+  --   build = "cargo install --locked code-minimap",
+  -- },
+  -- { "is0n/jaq-nvim" }, -- Quickrun for Neovim
+  -- { "hkupty/iron.nvim" }, -- Interactive REPL
+  -- { "natecraddock/workspaces.nvim" },
+}, {
+  ui = {
+    -- UIの境界線のスタイル
+    border = "rounded",
+    -- アイコン
+    icons = {
+      cmd = "⌘",
+      config = "🛠",
+      event = "📅",
+      ft = "📂",
+      init = "⚙",
+      keys = "🔑",
+      plugin = "🔌",
+      runtime = "💻",
+      source = "📄",
+      start = "🚀",
+      task = "📌",
+      lazy = "💤 ",
+    },
+  },
+  -- インストールするプラグインの並び順
+  install = {
+    -- カラースキームを最初にインストール
+    colorscheme = { "neosolarized" },
+  },
+  -- 自動チェックアップデートの頻度（日数）
+  checker = {
+    enabled = true,
+    frequency = 7, -- 7日ごとにチェック
+    notify = false, -- 通知を表示しない
+  },
+  -- パフォーマンス関連の設定
+  performance = {
+    rtp = {
+      -- 無効化するプラグイン
+      disabled_plugins = {
+        "gzip",
+        "matchit",
+        "matchparen",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
+      },
+    },
+  },
+})

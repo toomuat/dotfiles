@@ -1,6 +1,6 @@
 local status, metals = pcall(require, "metals")
--- if (not status) then return end
-if (true) then return end
+if (not status) then return end
+-- if (true) then return end
 local metals_config = metals.bare_config()
 
 -- Example configuration #39
