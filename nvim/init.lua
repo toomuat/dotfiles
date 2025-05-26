@@ -18,7 +18,6 @@ vim.opt.rtp:prepend(lazypath)
 
 if not vim.g.vscode then
   require("plugins")
-else
 end
 
 local has = function(x)

@@ -14,7 +14,6 @@ return require("lazy").setup({
   { "hrsh7th/cmp-buffer" },    -- nvim-cmp source for buffer words
   { "hrsh7th/cmp-nvim-lsp" },  -- nvim-cmp source for neovim's built-in LSP
   { "hrsh7th/nvim-cmp" },      -- Completion
-  { "neovim/nvim-lspconfig" }, -- LSP
   { "nvimdev/lspsaga.nvim" },   -- LSP UIs
   {
     "j-hui/fidget.nvim",       -- LSP progress
@@ -66,8 +65,6 @@ return require("lazy").setup({
   { 'jose-elias-alvarez/null-ls.nvim' }, -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
   { "munifTanjim/prettier.nvim" },       -- Prettier plugin for Neovim's built-in LSP client
   { "williamboman/mason.nvim" },
-  { "williamboman/mason-lspconfig.nvim" },
-  { "simrat39/rust-tools.nvim" },
   { "mfussenegger/nvim-jdtls" },
   {
     "scalameta/nvim-metals",
@@ -75,7 +72,7 @@ return require("lazy").setup({
   },
 
   -- Git
-  { "lewis6991/gitsigns.nvim" },
+  -- { "lewis6991/gitsigns.nvim" },
   { "dinhhuy258/git.nvim" },
   { "akinsho/git-conflict.nvim" },
   -- { "pwntester/octo.nvim" }, -- Edit and review GitHub issues and pull requests
@@ -88,9 +85,7 @@ return require("lazy").setup({
   { "tpope/vim-repeat" },
 
   -- ファイラー
-  { "lambdalisue/fern.vim" },
   { "lambdalisue/nerdfont.vim" },
-  { "lambdalisue/fern-renderer-nerdfont.vim" },
   { "lambdalisue/glyph-palette.vim" },
   { "nvim-tree/nvim-tree.lua" },
   { "nvim-tree/nvim-web-devicons" },
