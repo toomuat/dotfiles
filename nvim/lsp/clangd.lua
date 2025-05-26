@@ -1,5 +1,5 @@
--- Scala Language Server設定
-local lsp_common = require("after/lsp")
+-- C/C++ Language Server設定
+local lsp_common = require(".init")
 
 ---@type vim.lsp.Config
 return {

@@ -17,7 +17,16 @@ lazy.setup({
   { "hrsh7th/cmp-buffer" },    -- nvim-cmp source for buffer words
   { "hrsh7th/cmp-nvim-lsp" },  -- nvim-cmp source for neovim's built-in LSP
   { "hrsh7th/nvim-cmp" },      -- Completion
-  { "nvimdev/lspsaga.nvim" },   -- LSP UIs
+  { 
+    "nvimdev/lspsaga.nvim",   -- LSP UIs
+    version = "*",  -- 最新の安定バージョンを使用
+    lazy = false,  -- 即時ロード
+    priority = 100,  -- 高優先度
+    dependencies = {
+      {"nvim-tree/nvim-web-devicons"},
+      {"nvim-treesitter/nvim-treesitter"}
+    }
+  },
   {
     "j-hui/fidget.nvim",       -- LSP progress
     tag = "legacy"

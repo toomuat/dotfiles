@@ -1,5 +1,5 @@
 -- Tailwind CSS Language Server設定
-local lsp_common = require("after/lsp")
+local lsp_common = require(".init")
 
 ---@type vim.lsp.Config
 return {

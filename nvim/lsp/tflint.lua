@@ -1,5 +1,5 @@
--- Terraform Language Server設定
-local lsp_common = require("after/lsp")
+-- TFLint Language Server設定
+local lsp_common = require(".init")
 
 ---@type vim.lsp.Config
 return {

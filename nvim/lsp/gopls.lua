@@ -1,5 +1,5 @@
--- Erlang Language Server設定
-local lsp_common = require("after/lsp")
+-- Go Language Server設定
+local lsp_common = require(".init")
 
 ---@type vim.lsp.Config
 return {

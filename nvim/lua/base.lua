@@ -47,6 +47,64 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 -- Add asterisks in block comments
 vim.opt.formatoptions:append { "r" }
 
+-- パッケージの検索パスにLSP設定ディレクトリを追加
+local lsp_path = vim.fn.stdpath("config") .. "/lsp"
+package.path = package.path .. ";" .. lsp_path .. "/?.lua"
+package.path = package.path .. ";" .. lsp_path .. "/?/init.lua"
+
+-- LSPのデバッグログを有効化
+vim.lsp.set_log_level("debug")
+
+-- LSP関連のログファイルの場所を指定
+local nvim_cache = vim.fn.stdpath('cache')
+if vim.fn.isdirectory(nvim_cache) == 0 then
+  vim.fn.mkdir(nvim_cache, 'p')
+end
+vim.env.NVIM_LSP_LOG_FILE = nvim_cache .. '/lsp.log'
+
+-- デバッグ用にモジュールの読み込み状況を表示する関数
+vim.api.nvim_create_user_command("CheckModule", function(opts)
+  local module_name = opts.args
+  if module_name == "" then
+    print("Usage: CheckModule <module_name>")
+    return
+  end
+  
+  local status, result = pcall(require, module_name)
+  if status then
+    print("Successfully loaded module: " .. module_name)
+    print("Result type: " .. type(result))
+    if type(result) == "table" then
+      print("Keys: " .. vim.inspect(vim.tbl_keys(result)))
+    else
+      print("Value: " .. tostring(result))
+    end
+  else
+    print("Failed to load module: " .. module_name)
+    print("Error: " .. tostring(result))
+    
+    -- 検索パスを表示
+    print("\nLua search paths:")
+    for path in string.gmatch(package.path, "[^;]+") do
+      print("  " .. path)
+    end
+  end
+end, {nargs = "?", desc = "Check if a Lua module can be loaded"})
+
+-- LSP関連の設定を再読み込みするコマンド
+vim.api.nvim_create_user_command("ReloadLSPConfig", function()
+  local lsp_config_file = vim.fn.stdpath("config") .. "/lsp/init.lua"
+  if vim.fn.filereadable(lsp_config_file) == 1 then
+    dofile(lsp_config_file)
+    print("Reloaded LSP config from " .. lsp_config_file)
+  else
+    print("LSP config file not found: " .. lsp_config_file)
+  end
+end, {desc = "Reload LSP configuration"})
+
+-- updatetimeの設定
+vim.opt.updatetime = 300
+
 vim.opt.fillchars = {
   horiz     = '━',
   horizup   = '┻',

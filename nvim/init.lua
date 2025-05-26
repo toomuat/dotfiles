@@ -16,6 +16,21 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+-- プラグインパスをRTPに追加
+local lspsaga_path = vim.fn.stdpath("data") .. "/lazy/lspsaga.nvim"
+if vim.loop.fs_stat(lspsaga_path) then
+  vim.opt.rtp:prepend(lspsaga_path)
+  -- vim.notify("Added lspsaga to runtimepath: " .. lspsaga_path, vim.log.levels.INFO)
+else
+  vim.notify("lspsaga path not found at: " .. lspsaga_path, vim.log.levels.WARN)
+end
+
+-- デバッグ情報レベルを設定
+vim.lsp.set_log_level("debug")
+
+-- lspモジュールをパスに追加
+vim.opt.rtp:append(vim.fn.stdpath("config"))
+
 if not vim.g.vscode then
   require("plugins")
 end
