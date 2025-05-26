@@ -1,5 +1,8 @@
+local status, lazy = pcall(require, "lazy")
+if (not status) then return end
+
 -- lazy.nvimの設定
-return require("lazy").setup({
+lazy.setup({
   -- カラースキーム
   {
     "svrana/neosolarized.nvim",
@@ -74,7 +77,7 @@ return require("lazy").setup({
   },
 
   -- Git
-  -- { "lewis6991/gitsigns.nvim" },
+  { "lewis6991/gitsigns.nvim" },
   { "dinhhuy258/git.nvim" },
 
   -- モーション
