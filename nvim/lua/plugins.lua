@@ -76,8 +76,6 @@ return require("lazy").setup({
   -- Git
   -- { "lewis6991/gitsigns.nvim" },
   { "dinhhuy258/git.nvim" },
-  { "akinsho/git-conflict.nvim" },
-  -- { "pwntester/octo.nvim" }, -- Edit and review GitHub issues and pull requests
 
   -- モーション
   { "ggandor/leap.nvim" },
@@ -97,18 +95,6 @@ return require("lazy").setup({
 
   -- コードランナー
   { "CRAG666/code_runner.nvim" },
-
-  -- コメントアウトされたプラグイン
-  -- { "kristijanhusak/defx-icons" },
-  -- { "rmagatti/session-lens" },
-  -- { "rmagatti/auto-session" },
-  -- {
-  --   "wfxr/minimap.vim",
-  --   build = "cargo install --locked code-minimap",
-  -- },
-  -- { "is0n/jaq-nvim" }, -- Quickrun for Neovim
-  -- { "hkupty/iron.nvim" }, -- Interactive REPL
-  -- { "natecraddock/workspaces.nvim" },
 }, {
   ui = {
     -- UIの境界線のスタイル
@@ -138,7 +124,7 @@ return require("lazy").setup({
   checker = {
     enabled = true,
     frequency = 7, -- 7日ごとにチェック
-    notify = false, -- 通知を表示しない
+    notify = true, -- 通知を表示しない
   },
   -- パフォーマンス関連の設定
   performance = {

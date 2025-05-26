@@ -20,5 +20,3 @@ nvim_tree.setup({
 
 vim.keymap.set("n", "<space>e", ":NvimTreeToggle<CR>")
 vim.keymap.set("n", "<space>E", ":NvimTreeFindFile<CR>")
--- vim.keymap.set("n", "<space>E", ":<C-u>Fern . -drawer -reveal=%<CR>")
-
