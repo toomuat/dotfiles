@@ -29,11 +29,9 @@ DOTFILES_PATH="${DOTFILES_PATH:-${HOME}/dotfiles}"
 git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
 /bin/bash "${DOTFILES_PATH}"/link.sh
 
-# zplug
+# zinit
 set +e
-curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-# source ~/".zshrc"
-# zplug install
+bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 
 # fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf

@@ -36,12 +36,18 @@ if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
   zcompile ~/.zshrc
 fi
 
-source ~/.zplug/init.zsh
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-zplug "zsh-users/zsh-autosuggestions", defer:2
-zplug "zsh-users/zsh-completions", defer:2
-zplug "rupa/z", use:z.sh
-zplug load --verbose > /dev/null
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+[ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
+[ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
+source "${ZINIT_HOME}/zinit.zsh"
+
+# プラグインのロード（遅延ロード）
+zinit wait lucid for \
+  zsh-users/zsh-syntax-highlighting \
+  zsh-users/zsh-autosuggestions \
+  zsh-users/zsh-completions
+
+zinit snippet https://github.com/rupa/z/blob/master/z.sh
 
 # `binkey -L` to show bindings
 bindkey -e
@@ -64,3 +70,13 @@ compinit
 
 # bun completions
 [ -s "/opt/homebrew/Cellar/bun/0.8.1/share/zsh/site-functions/_bun" ] && source "/opt/homebrew/Cellar/bun/0.8.1/share/zsh/site-functions/_bun"
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+## End of Zinit's installer chunk

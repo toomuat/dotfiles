@@ -12,10 +12,8 @@ sudo chmod +x /usr/share/doc/git/contrib/diff-highlight/diff-highlight
 sudo ln -s /usr/share/doc/git/contrib/diff-highlight/diff-highlight \
   /usr/local/bin/diff-highlight
 
-# zplug
-curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
-# source ~/".zshrc"
-# zplug install
+# zinit
+bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 
 # fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf

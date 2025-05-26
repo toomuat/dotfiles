@@ -48,6 +48,7 @@ brew "tfsec"
 brew "tmux"
 brew "tree"
 brew "wget"
+brew "zinit"
 
 cask "docker"
 cask "google-chrome"
