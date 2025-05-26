@@ -27,7 +27,9 @@ return require("lazy").setup({
   -- Treesitter
   {
     'nvim-treesitter/nvim-treesitter',
-    build = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
+    branch = 'master',
+    lazy = false,
+    build = ':TSUpdate',
   },
   { "RRethy/nvim-treesitter-endwise" },
   { "nvim-treesitter/nvim-treesitter-textobjects" },
