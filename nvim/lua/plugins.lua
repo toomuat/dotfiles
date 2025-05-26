@@ -62,7 +62,7 @@ return require("lazy").setup({
   },
 
   -- LSP拡張
-  { 'jose-elias-alvarez/null-ls.nvim' }, -- Use Neovim as a language server to inject LSP diagnostics, code actions, and more via Lua
+  { 'nvimtools/none-ls.nvim' }, -- Fork of null-ls.nvim maintained by the community
   { "munifTanjim/prettier.nvim" },       -- Prettier plugin for Neovim's built-in LSP client
   { "williamboman/mason.nvim" },
   { "mfussenegger/nvim-jdtls" },
