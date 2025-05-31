@@ -27,6 +27,9 @@ setopt no_beep
 setopt auto_param_keys
 setopt hist_ignore_all_dups
 
+# '/' / '=' を単語の境界として認める
+typeset -g WORDCHARS=${WORDCHARS:s@/@@:s@=@@}
+
 zstyle ':completion:*:default' menu select=2
 # Enable case-insensitive completion but distinguish uppercase input
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
@@ -56,14 +59,12 @@ bindkey "^;" fzf-z-search
 bindkey "^o" down-line-or-history
 # bindkey "^r" history-incremental-pattern-search-backward
 bindkey "^s" history-incremental-pattern-search-forward
-bindkey "^X" delete_until_slash
 bindkey "^Z" fancy-ctrl-z
 # \e[3~: Delete key
 bindkey "\e[3~" delete-char
 
 zle -N fancy-ctrl-z
 zle -N fzf-z-search
-zle -N delete_until_slash
 
 autoload -U compinit
 compinit

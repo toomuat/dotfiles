@@ -111,20 +111,6 @@ fancy-ctrl-z () {
   fi
 }
 
-delete_until_slash() {
-  # Get the current cursor position
-  local cur_pos="${CURSOR}"
-  # Get the left side string from the current cursor position
-  local left_str=${BUFFER[1,${cur_pos}]}
-  # Search for the position where "/" appears
-  local delete_word_len=${#${left_str##*\/}}
-  # local slash_pos=$(( "${#left_str}" - "${delete_word_len}" - 1 ))
-  # Delete the string up to the position where "/" appears
-  BUFFER="${BUFFER[1,$((cur_pos-delete_word_len))]}${RBUFFER}"
-  # Move the cursor to the position where "/" appears
-  CURSOR=$((cur_pos-delete_word_len))
-}
-
 RED="\e[1;32m"
 RED_BOLD="\e[1;4;31m"
 YELLOW="\e[01;33m"
