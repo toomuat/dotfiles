@@ -36,7 +36,7 @@ vim.opt.mouse:append('a') -- マウス操作を有効化
 vim.opt.backup = false -- バックアップファイルを作らない
 vim.opt.swapfile = false -- スワップファイルを作らない
 vim.opt.signcolumn = "yes" -- サインカラムを常に表示
-vim.opt.relativenumber = true -- 相対行番号を表示
+vim.opt.relativenumber = false -- 相対行番号を表示しない
 
 -- Undercurl（下線装飾）の設定
 vim.cmd([[let &t_Cs = "\e[4:3m"]])
