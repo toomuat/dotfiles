@@ -1,3 +1,7 @@
+-- none-ls.nvim: LSPのように外部フォーマッタやリンタを統合するプラグイン
+-- mason.nvimと連携し、各種ツールを自動セットアップ
+-- https://github.com/nvimtools/none-ls.nvim
+
 return {
   {
     "nvimtools/none-ls.nvim",

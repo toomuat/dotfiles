@@ -1,3 +1,7 @@
+-- lspkind.nvim: LSP補完メニューにアイコンや説明を追加するプラグイン
+-- nvim-cmpや他の補完プラグインと連携して視認性向上
+-- https://github.com/onsails/lspkind.nvim
+
 return {
   {
     "onsails/lspkind.nvim",

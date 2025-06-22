@@ -1,3 +1,7 @@
+-- zen-mode.nvim: 集中モードで作業できるNeovim用プラグイン
+-- <leader>zz でZenModeをトグル、:ZenModeコマンドも利用可能
+-- https://github.com/folke/zen-mode.nvim
+
 return {
   {
     "folke/zen-mode.nvim",

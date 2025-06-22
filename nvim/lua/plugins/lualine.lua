@@ -1,3 +1,7 @@
+-- lualine.nvim: 高機能かつカスタマイズ性の高いステータスラインプラグイン
+-- テーマやアイコン、セクションのカスタマイズが可能
+-- https://github.com/nvim-lualine/lualine.nvim
+
 return {
   {
     "nvim-lualine/lualine.nvim",

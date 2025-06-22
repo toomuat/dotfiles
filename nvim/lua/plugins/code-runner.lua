@@ -1,3 +1,8 @@
+-- code_runner.nvim: ファイルやプロジェクトを簡単に実行できるプラグイン
+-- <leader>r で現在ファイルを実行、<leader>rp でプロジェクト実行
+-- 多言語対応、:RunCode などのコマンドも利用可能
+-- https://github.com/CRAG666/code_runner.nvim
+
 return {
   {
     "CRAG666/code_runner.nvim",

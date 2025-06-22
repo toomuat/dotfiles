@@ -1,3 +1,8 @@
+-- leap.nvim: 画面上の任意の文字へ一瞬でジャンプできる高速移動プラグイン
+-- s/S/gs で前方・後方・ウィンドウ間ジャンプ
+-- デフォルトマッピング有効化済み
+-- https://github.com/ggandor/leap.nvim
+
 return {
   {
     "ggandor/leap.nvim",

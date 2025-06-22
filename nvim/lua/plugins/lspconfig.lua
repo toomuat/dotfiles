@@ -1,3 +1,8 @@
+-- nvim-lspconfig: LSPサーバの設定・管理を簡単に行うプラグイン
+-- mason.nvimと連携し、各種言語サーバを自動セットアップ
+-- diagnosticsやサーバごとの細かな設定も可能
+-- https://github.com/neovim/nvim-lspconfig
+
 return {
   {
     "neovim/nvim-lspconfig",

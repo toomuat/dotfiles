@@ -1,3 +1,8 @@
+-- neosolarized.nvim: Solarized系カラースキームを提供するプラグイン
+-- :colorscheme neosolarized で有効化
+-- colorbuddy連携で細かな色調整も可能
+-- https://github.com/svrana/neosolarized.nvim
+
 return {
   {
     "svrana/neosolarized.nvim",

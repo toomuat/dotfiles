@@ -1,3 +1,8 @@
+-- vim-commentary: シンプルなコメントアウトプラグイン
+-- gc で行コメント、gb でブロックコメント
+-- gcc で現在行をトグル
+-- https://github.com/tpope/vim-commentary
+
 return {
   {
     "tpope/vim-commentary",

@@ -1,3 +1,8 @@
+-- nvim-cmp: Neovim用の強力な補完エンジン
+-- LSPやバッファ、パス、スニペット等多彩なソースに対応
+-- <Tab>/<CR>で補完確定、Luasnip連携も可能
+-- https://github.com/hrsh7th/nvim-cmp
+
 return {
   {
     "hrsh7th/nvim-cmp",

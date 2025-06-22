@@ -1,3 +1,9 @@
+-- mason.nvim: LSPやフォーマッタなどのインストール・管理を行うプラグイン
+-- :Mason コマンドでUIを開き、各種ツールのインストール状況を管理できる
+-- ensure_installedで自動インストール対象を指定
+-- 例: <leader>cm でMasonを起動
+-- https://github.com/williamboman/mason.nvim
+
 return {
   {
     "williamboman/mason.nvim",

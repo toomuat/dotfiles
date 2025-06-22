@@ -1,3 +1,8 @@
+-- nvim-treesitter: 高速・高精度な構文解析によるシンタックスハイライトやインデント補助
+-- :TSUpdate でパーサ更新、ensure_installedで自動インストール言語指定
+-- textobjectsやendwise等の拡張も利用
+-- https://github.com/nvim-treesitter/nvim-treesitter
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",

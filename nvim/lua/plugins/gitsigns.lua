@@ -1,3 +1,8 @@
+-- gitsigns.nvim: Gitの差分や変更箇所をサインカラムに表示
+-- <leader>hs などでhunk操作、変更箇所ジャンプも可能
+-- ファイル保存時や新規作成時に自動有効化
+-- https://github.com/lewis6991/gitsigns.nvim
+
 return {
   {
     "lewis6991/gitsigns.nvim",

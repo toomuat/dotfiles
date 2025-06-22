@@ -1,3 +1,8 @@
+-- toggleterm.nvim: ターミナルをNeovim内で簡単に開閉できるプラグイン
+-- <leader>tt で通常ターミナル、<leader>tf でフロート、<leader>th で横分割、<leader>tv で縦分割
+-- :ToggleTerm コマンドでも起動可能
+-- https://github.com/akinsho/toggleterm.nvim
+
 return {
   {
     "akinsho/toggleterm.nvim",

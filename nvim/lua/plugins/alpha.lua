@@ -1,3 +1,7 @@
+-- alpha-nvim: Neovimのスタート画面をカスタマイズできるプラグイン
+-- 起動時に便利なショートカットや最近使ったファイルを表示
+-- https://github.com/goolord/alpha-nvim
+
 return {
   "goolord/alpha-nvim",
   opts = function()

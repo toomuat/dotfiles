@@ -1,3 +1,7 @@
+-- lspsaga.nvim: LSPのUIや操作性を強化する多機能プラグイン
+-- コードアクション・リネーム・ドキュメント表示・診断ジャンプなどを便利に
+-- https://github.com/nvimdev/lspsaga.nvim
+
 return {
   {
     "nvimdev/lspsaga.nvim",

@@ -1,3 +1,7 @@
+-- nvim-tree.lua: ファイルエクスプローラーをNeovimに追加するプラグイン
+-- <space>e でトグル、<space>E でファイル検索
+-- https://github.com/nvim-tree/nvim-tree.lua
+
 return {
   {
     "nvim-tree/nvim-tree.lua",

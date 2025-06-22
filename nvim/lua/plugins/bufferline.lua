@@ -1,3 +1,8 @@
+-- bufferline.nvim: バッファ（タブ）を見やすく表示・管理するプラグイン
+-- <leader>bp でピン留め、<leader>bP で非ピン留めバッファを削除
+-- LSP診断情報もバッファごとに表示
+-- https://github.com/akinsho/bufferline.nvim
+
 return {
   {
     "akinsho/bufferline.nvim",

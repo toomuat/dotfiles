@@ -1,3 +1,8 @@
+-- LuaSnip: 高機能スニペットエンジン
+-- VSCode形式のスニペットも利用可能
+-- <Tab>でスニペット展開・ジャンプ
+-- https://github.com/L3MON4D3/LuaSnip
+
 return {
   {
     "L3MON4D3/LuaSnip",
