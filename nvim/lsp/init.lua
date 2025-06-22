@@ -60,13 +60,13 @@ M.on_attach = function(client, bufnr)
 
   -- キーマッピング
   local opts = { noremap = true, silent = true }
-  vim.keymap.set('n', 'gj', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  vim.keymap.set('n', 'gj', '<Cmd>lua vim.lsp.buf.declaration()<CR>', vim.tbl_extend("force", opts, { desc = "LSP宣言にジャンプ" }))
+  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', vim.tbl_extend("force", opts, { desc = "LSP実装にジャンプ" }))
   -- vim.keymap.set('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts) -- Use lspsaga
   -- vim.keymap.set('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)       -- Use lspsaga
-  vim.keymap.set('n', '<space>f', '<cmd>lua vim.lsp.buf.format{ async = true }<CR>', opts)
-  vim.keymap.set('n', 'gwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
+  vim.keymap.set('n', '<space>f', '<cmd>lua vim.lsp.buf.format{ async = true }<CR>', vim.tbl_extend("force", opts, { desc = "LSPフォーマット" }))
+  vim.keymap.set('n', 'gwl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', vim.tbl_extend("force", opts, { desc = "ワークスペースフォルダ一覧表示" }))
+  vim.keymap.set('n', 'gl', '<cmd>lua vim.diagnostic.setloclist()<CR>', vim.tbl_extend("force", opts, { desc = "診断をロケーションリストに設定" }))
 
   -- Format on save
   local augroup_format = vim.api.nvim_create_augroup("Format", { clear = true })

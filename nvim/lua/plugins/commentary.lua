@@ -6,7 +6,8 @@ return {
       { "gb", mode = { "n", "v" }, desc = "Comment toggle blockwise" },
     },
     init = function()
-      vim.keymap.set("n", "gcc", "gc_", { remap = true })
+      -- ノーマルモードで現在行のコメントをトグル
+      vim.keymap.set("n", "gcc", "gc_", { remap = true, desc = "ノーマルモードで現在行をコメント/解除" })
     end,
   },
 }
