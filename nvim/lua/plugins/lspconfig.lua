@@ -33,7 +33,7 @@ return {
         pyright = {},
         rust_analyzer = {},
         gopls = {},
-        tsserver = {},
+        ts_ls = {},
         html = {},
         cssls = {},
         tailwindcss = {},
