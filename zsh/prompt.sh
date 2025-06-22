@@ -1,3 +1,4 @@
+# プロンプトの色設定
 GREEN="%{\e[38;5;118m%}"
 YELLOW="%{\e[38;5;190m%}"
 CYAN="%{\e[38;5;080m%}"
@@ -5,8 +6,10 @@ USER_NAME=%n
 CURRENT_DIR=%C
 RESET="%{\e[0m%}"
 
+# 左プロンプトの定義（ユーザー名とカレントディレクトリを色付きで表示）
 PROMPT=$'%{\e[38;5;118m%}[%{\e[0m%}%{\e[38;5;190m%}%n%{\e[0m%}:%{\e[38;5;080m%}%C%{\e[0m%}%{\e[38;5;118m%}]%{\e[0m%}$ '
 
+# 右プロンプトにgitブランチと状態を表示する関数
 rprompt-git-current-branch() {
   local branch_name st branch_status
 
@@ -48,7 +51,9 @@ rprompt-git-current-branch() {
   RPROMPT="${branch_status}[$branch_name]%f"
 }
 
+# シェル起動時に右プロンプトを初期化
 RPROMPT="$(rprompt-git-current-branch)"
 
+# コマンド実行後に右プロンプトを更新するフックを追加
 autoload -Uz add-zsh-hook
 add-zsh-hook precmd rprompt-git-current-branch

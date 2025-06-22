@@ -1,3 +1,4 @@
+# 指定したディレクトリに移動し、lsで中身を表示
 cdls() {
   if [[ -d "$1" ]]; then
     cd "$1" || return
@@ -7,6 +8,7 @@ cdls() {
   fi
 }
 
+# ディレクトリがなければ作成して移動
 mcd() {
   if [[ ! -d "$1" ]]; then
     mkdir -p "$1"
@@ -14,20 +16,24 @@ mcd() {
   fi
 }
 
+# ディレクトリを.bakとしてバックアップ
 backup() {
   if [[ -d "$1" ]]; then
     cp "$1"{,.bak}
   fi
 }
 
+# ルートからファイル名をあいまい検索
 gfind() {
   find / -iname "$@" 2>/dev/null
 }
 
+# カレントディレクトリ以下をあいまい検索
 lfind() {
   find . -iname "$@" 2>/dev/null
 }
 
+# manで検索し、なければブラウザでGoogle検索
 search() {
   if [[ $# -ne 1 ]]; then
     echo "Usage: search <word>"
@@ -37,6 +43,7 @@ search() {
   man "$1" 2>/dev/null || "${BROWSER}" "http://www.google.com/search?q=\"$1\""
 }
 
+# CSVファイルをSQLでクエリ実行
 sqlcsv() {
   if [ $# -lt 2 ]
   then
@@ -57,7 +64,7 @@ sqlcsv() {
   fi
 }
 
-# Cut $1 column
+# 指定した列だけ抽出
 col() {
   var_column="$1"
   # shellcheck disable=SC2027,SC2086
@@ -65,7 +72,7 @@ col() {
   # awk -v col="$1" "{print ${col}}"
 }
 
-# curlsh : Safer curl
+# curlで取得したスクリプトを一度エディタで開いてから実行
 curlsh() {
   local file
 
@@ -76,6 +83,7 @@ curlsh() {
   rm "${file}";
 }
 
+# Rustファイルをコンパイルして実行
 rc() {
   local filepath="$1"
   local extension="${filepath##*.}"
@@ -91,6 +99,7 @@ rc() {
   rm "${name}"
 }
 
+# LaTeX + BibTeX + PDF化
 bib() {
   platex "$1"
   pbibtex "$(basename "$1" .tex)"
@@ -116,6 +125,7 @@ RED_BOLD="\e[1;4;31m"
 YELLOW="\e[01;33m"
 RESET="\e[0m"
 
+# manページの色付け
 man() {
   env \
     LESS_TERMCAP_mb="$(printf "\e[1;32m")" \
@@ -128,6 +138,7 @@ man() {
     man "$@"
 }
 
+# 1つ前のコミットにcheckout
 gn() {
   git log --all --reverse --pretty=%H | \
     grep -A1 "$(git rev-parse HEAD)" | \
@@ -142,7 +153,7 @@ export FZF_DEFAULT_OPTS="--height 90% --reverse --border --ansi --preview 'bat -
 export FZF_ALT_C_OPTS="--reverse --preview 'tree -C {} | head -200'"
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 
-# fbr : Checkout git branch (including remote branches)
+# fzfでブランチ選択してcheckout
 fbr() {
   local branches branch
   branches=$(git branch --all | grep -v HEAD) &&
@@ -151,7 +162,7 @@ fbr() {
     git checkout "$(echo "${branch}" | sed 's/.* //' | sed 's#remotes/[^/]*/##')"
 }
 
-# fshow - git commit browser (enter for show, ctrl-d for diff)
+# fzfでgitログをブラウズ・diff
 fshow() {
   local out shas sha q k
 
@@ -175,7 +186,7 @@ fshow() {
   done
 }
 
-# fzf-z-search : Change directory from history
+# zコマンドの履歴からディレクトリ移動
 fzf-z-search() {
   local res
 
@@ -189,7 +200,7 @@ fzf-z-search() {
 }
 
 # https://zenn.dev/k4zu/scraps/58907ad402b02c
-# fzf cat
+# fzfでファイル選択してbatで中身表示
 fcat (){
   local selected
 
@@ -221,6 +232,7 @@ vf() {
   nvim "${file_name}"
 }
 
+# fzfでディレクトリ選択してcd
 fcd() {
   local dir_name
 
@@ -228,7 +240,7 @@ fcd() {
   cd "${dir_name}" || return
 }
 
-# fgf: Fuzzy find git file at arbitary commit
+# 任意コミットのファイルをfzfで選択して中身表示
 fgf() {
   if [ ! -d ".git" ]; then
     echo "Not in a git repository."
@@ -272,7 +284,7 @@ fgf() {
   git show "${commit_id}":"${file}"
 }
 
-# fga : Preview modified file
+# gitで変更済みファイルをfzfで選択
 fga() {
   local modified_files selected_files
   modified_files=$(git status --short | awk "{if ($1 == 'M') {print $2}}") &&
@@ -280,11 +292,12 @@ fga() {
   echo "${selected_files}"
 }
 
-# fpre : preview file of current directory
+# fzfでカレントディレクトリのファイルをプレビュー
 fpre() {
   fd --type f --hidden --follow --exclude .git | fzf
 }
 
+# GitHub Actions workflowを実行
 gh-run() {
   if [[ $# != 1 ]]; then
     echo "Usage: gh-run <workflow>"
@@ -295,6 +308,7 @@ gh-run() {
   gh workflow run .github/workflows/"${workflow}" --ref "$(git branch --show-current)"
 }
 
+# GitHub Actions workflowの最新実行をwatch
 gh-watch() {
   if [[ $# != 1 ]]; then
     echo "Usage: gh-watch <workflow>"
@@ -309,6 +323,7 @@ gh-watch() {
     xargs gh run watch
 }
 
+# GitHub Actions workflowの最新実行をview
 gh-view() {
   if [[ $# != 1 ]]; then
     echo "Usage: gh-view <workflow>"
@@ -323,6 +338,7 @@ gh-view() {
     xargs gh run view
 }
 
+# GitHub Actions workflowのログを表示
 gh-log() {
   if [[ $# != 1 ]]; then
     echo "Usage: gh-log <workflow>"
@@ -337,6 +353,7 @@ gh-log() {
     xargs gh run view --log
 }
 
+# fzfでGitHubリポジトリを選択してwebで開く
 ghv() {
   local repo
 
@@ -349,6 +366,7 @@ ghv() {
   gh repo view --web "${repo}"
 }
 
+# fzfでPRを選択してcheckout
 ghp() {
   selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
   pr_number=$(echo "${selected_pr}" | awk '{print $1}')
@@ -359,6 +377,7 @@ ghp() {
   fi
 }
 
+# fzfでPRを選択してwebで表示
 ghpv() {
   selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
   pr_number=$(echo "${selected_pr}" | awk '{print $1}')
@@ -369,6 +388,7 @@ ghpv() {
   fi
 }
 
+# Copilot CLIのラッパー
 ghco() {
   gh copilot suggest -t shell "$@"
 }
