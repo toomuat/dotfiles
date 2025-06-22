@@ -139,3 +139,7 @@ vim.api.nvim_exec([[
   autocmd FileType go setlocal softtabstop=8
   autocmd FileType go setlocal tabstop=8
 ]], false)
+
+-- leaderキーを<Space>に設定
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
