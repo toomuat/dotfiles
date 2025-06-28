@@ -10,15 +10,17 @@ DOTFILES_PATH="${DOTFILES_PATH:-${HOME}/dotfiles}"
 # OS detection
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Detected macOS. Starting setup..."
-    xcode-select --install
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if ! xcode-select -p &>/dev/null; then
+      xcode-select --install
+    fi
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install git
 
     git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
 
     mkdir -p "${HOME}"/.config
     cd "${DOTFILES_PATH}"
-    stow */
+    stow git nvim tmux zsh wezterm
     cd -
 
     /bin/bash "${DOTFILES_PATH}"/setup/setup_mac.sh
@@ -31,7 +33,7 @@ elif [[ "$(uname -r)" =~ "microsoft" ]] || [[ $(grep -c "Ubuntu" /etc/os-release
 
     mkdir -p "${HOME}"/.config
     cd "${DOTFILES_PATH}"
-    stow */
+    stow git nvim tmux zsh wezterm
     cd -
 
     /bin/bash "${DOTFILES_PATH}"/setup/setup_ubuntu.sh
