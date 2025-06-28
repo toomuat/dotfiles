@@ -28,6 +28,7 @@ setopt complete_in_word
 setopt no_beep
 setopt auto_param_keys
 setopt hist_ignore_all_dups
+setopt prompt_subst
 
 # WORDCHARSから'/'と'='を除外（単語区切りの挙動調整）
 typeset -g WORDCHARS=${WORDCHARS:s@/@@:s@=@@}
