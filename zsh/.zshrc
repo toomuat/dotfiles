@@ -86,3 +86,5 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-rust
 
 ## End of Zinit's installer chunk
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

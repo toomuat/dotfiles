@@ -1,7 +1,8 @@
 #!/bin/bash
 
-ln -snfv "${DOTFILES_PATH}"/Brewfile "${HOME}"/Brewfile
 brew bundle
+
+yes | "$(brew --prefix)"/opt/fzf/install
 
 nvm install node
 

@@ -20,7 +20,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
     mkdir -p "${HOME}"/.config
     cd "${DOTFILES_PATH}"
-    stow git nvim tmux zsh wezterm
+    stow git nvim tmux zsh wezterm Brewfile
     cd -
 
     /bin/bash "${DOTFILES_PATH}"/setup/setup_mac.sh
@@ -33,7 +33,7 @@ elif [[ "$(uname -r)" =~ "microsoft" ]] || [[ $(grep -c "Ubuntu" /etc/os-release
 
     mkdir -p "${HOME}"/.config
     cd "${DOTFILES_PATH}"
-    stow git nvim tmux zsh wezterm
+    stow git nvim tmux zsh wezterm Brewfile
     cd -
 
     /bin/bash "${DOTFILES_PATH}"/setup/setup_ubuntu.sh
