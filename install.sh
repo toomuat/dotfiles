@@ -16,7 +16,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
     git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
 
-    /bin/bash "${DOTFILES_PATH}"/link.sh
+    mkdir -p "${HOME}"/.config
+    cd "${DOTFILES_PATH}"
+    stow */
+    cd -
+
     /bin/bash "${DOTFILES_PATH}"/setup/setup_mac.sh
 
 elif [[ "$(uname -r)" =~ "microsoft" ]] || [[ $(grep -c "Ubuntu" /etc/os-release) -gt 0 ]]; then
@@ -25,7 +29,11 @@ elif [[ "$(uname -r)" =~ "microsoft" ]] || [[ $(grep -c "Ubuntu" /etc/os-release
 
     git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
 
-    /bin/bash "${DOTFILES_PATH}"/link.sh
+    mkdir -p "${HOME}"/.config
+    cd "${DOTFILES_PATH}"
+    stow */
+    cd -
+
     /bin/bash "${DOTFILES_PATH}"/setup/setup_ubuntu.sh
 
 else

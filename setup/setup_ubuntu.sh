@@ -3,9 +3,7 @@
 sudo apt update
 sudo apt upgrade -y
 
-sudo apt install -y \
-    zsh tmux wget cmake build-essential python3 \
-    python3-pip unzip
+sudo apt install -y     zsh tmux wget cmake build-essential python3     python3-pip unzip stow
 
 chsh -s "$(command -v zsh)"
 sudo chmod +x /usr/share/doc/git/contrib/diff-highlight/diff-highlight
