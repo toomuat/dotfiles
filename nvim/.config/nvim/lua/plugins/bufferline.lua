@@ -10,10 +10,12 @@ return {
     keys = {
       { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin" },
       { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
+      { "<C-n>", "<Cmd>BufferLineCycleNext<CR>", desc = "Next buffer" },
+      { "<C-p>", "<Cmd>BufferLineCyclePrev<CR>", desc = "Previous buffer" },
     },
     opts = {
       options = {
-        diagnostics = "nvim_lsp",
+        diagnostics = "none",
         always_show_bufferline = false,
         diagnostics_indicator = function(_, _, diag)
           local icons = require("lazyvim.config").icons.diagnostics
