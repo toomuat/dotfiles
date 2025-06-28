@@ -11,44 +11,44 @@ PROMPT=$'%{\e[38;5;118m%}[%{\e[0m%}%{\e[38;5;190m%}%n%{\e[0m%}:%{\e[38;5;080m%}%
 
 # 右プロンプトにgitブランチと状態を表示する関数
 rprompt-git-current-branch() {
-  local branch_name st branch_status
+    local branch_name st branch_status
 
-  st=$(git status 2>&1)
-  if [ $? -ne 0 ]; then
-    RPROMPT=""
-    return
-  fi
+    st=$(git status 2>&1)
+    if [ $? -ne 0 ]; then
+        RPROMPT=""
+        return
+    fi
 
-  # if [ ! -e ".git" ]; then
-  #   RPROMPT=""
-  #   return
-  # fi
+    # if [ ! -e ".git" ]; then
+    #   RPROMPT=""
+    #   return
+    # fi
 
-  branch_name=$(git rev-parse --abbrev-ref HEAD 2> /dev/null)
-  st=$(git status 2> /dev/null)
-  if echo "${st}" | grep -q "^nothing to"; then
-    # Displays green if all files are committed and clean
-    branch_status="%F{green}"
-  elif echo "${st}" | grep -q "^Untracked files"; then
-    # Displays red if there are untracked files not managed by git
-    branch_status="%F{red}?"
-  elif echo "${st}" | grep -q "^Changes not staged for commit"; then
-    # Displays red if there are files added to the repo but not staged
-    branch_status="%F{red}+"
-  elif echo "${st}" | grep -q "^Changes to be committed"; then
-    # Displays yellow if there are changes to be committed
-    branch_status="%F{yellow}!"
-  elif echo "${st}" | grep -q "^rebase in progress"; then
-    # Displays red with an exclamation point if there is a conflict
-    echo "%F{red}!(no branch)"
-    return
-  else
-    # Displays blue if the status is not any of the above
-    branch_status="%F{blue}"
-  fi
-  # Displays the branch name with color
-  # echo "${branch_status}[$branch_name]%f"
-  RPROMPT="${branch_status}[$branch_name]%f"
+    branch_name=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
+    st=$(git status 2>/dev/null)
+    if echo "${st}" | grep -q "^nothing to"; then
+        # Displays green if all files are committed and clean
+        branch_status="%F{green}"
+    elif echo "${st}" | grep -q "^Untracked files"; then
+        # Displays red if there are untracked files not managed by git
+        branch_status="%F{red}?"
+    elif echo "${st}" | grep -q "^Changes not staged for commit"; then
+        # Displays red if there are files added to the repo but not staged
+        branch_status="%F{red}+"
+    elif echo "${st}" | grep -q "^Changes to be committed"; then
+        # Displays yellow if there are changes to be committed
+        branch_status="%F{yellow}!"
+    elif echo "${st}" | grep -q "^rebase in progress"; then
+        # Displays red with an exclamation point if there is a conflict
+        echo "%F{red}!(no branch)"
+        return
+    else
+        # Displays blue if the status is not any of the above
+        branch_status="%F{blue}"
+    fi
+    # Displays the branch name with color
+    # echo "${branch_status}[$branch_name]%f"
+    RPROMPT="${branch_status}[$branch_name]%f"
 }
 
 # シェル起動時に右プロンプトを初期化

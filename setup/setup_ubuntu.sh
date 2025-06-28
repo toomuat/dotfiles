@@ -4,20 +4,20 @@ sudo apt update
 sudo apt upgrade -y
 
 sudo apt install -y \
-  zsh tmux wget cmake build-essential python3 \
-  python3-pip unzip
+    zsh tmux wget cmake build-essential python3 \
+    python3-pip unzip
 
 chsh -s "$(command -v zsh)"
 sudo chmod +x /usr/share/doc/git/contrib/diff-highlight/diff-highlight
 sudo ln -s /usr/share/doc/git/contrib/diff-highlight/diff-highlight \
-  /usr/local/bin/diff-highlight
+    /usr/local/bin/diff-highlight
 
 # zinit
 bash -c "$(curl --fail --show-error --silent --location https://raw.githubusercontent.com/zdharma-continuum/zinit/HEAD/scripts/install.sh)"
 
 # fzf
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
-yes | ~/.fzf/install > /dev/null &
+yes | ~/.fzf/install >/dev/null &
 yes_pid=$!
 wait $yes_pid
 
@@ -25,15 +25,14 @@ wait $yes_pid
 # wget https://github.com/neovim/neovim/releases/download/v0.8.2/nvim-linux64.deb && \
 #   apt install ./nvim-linux64.deb && \
 #   rm ./nvim-linux64.deb
-wget https://github.com/neovim/neovim/releases/download/v0.9.0/nvim-linux64.tar.gz && \
-  tar xf nvim-linux64.tar.gz && \
-  sudo cp nvim-linux64/bin/nvim /usr/local/bin && \
-  sudo cp -r nvim-linux64/lib/nvim /usr/local/lib && \
-  sudo cp -r nvim-linux64/share/nvim /usr/local/share && \
-  rm nvim-linux64.tar.gz
+wget https://github.com/neovim/neovim/releases/download/v0.9.0/nvim-linux64.tar.gz &&
+    tar xf nvim-linux64.tar.gz &&
+    sudo cp nvim-linux64/bin/nvim /usr/local/bin &&
+    sudo cp -r nvim-linux64/lib/nvim /usr/local/lib &&
+    sudo cp -r nvim-linux64/share/nvim /usr/local/share &&
+    rm nvim-linux64.tar.gz
 # Packer
-git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 # Run :PackerInstall in Neovim
 
 # NVM
@@ -44,18 +43,18 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 
 # Docker
 sudo apt-get install -y \
-  ca-certificates \
-  curl \
-  gnupg
+    ca-certificates \
+    curl \
+    gnupg
 # Add Docker’s official GPG key:
 sudo install -m 0755 -d /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 sudo chmod a+r /etc/apt/keyrings/docker.gpg
 # Use the following command to set up the repository:
 echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  $(source /etc/os-release < /dev/null && echo "${VERSION_CODENAME}") stable" | \
-  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  $(source /etc/os-release </dev/null && echo "${VERSION_CODENAME}") stable" |
+    sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
 # Install Docker Engine
 sudo apt update
 sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin

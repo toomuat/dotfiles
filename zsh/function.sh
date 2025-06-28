@@ -1,123 +1,131 @@
 # 指定したディレクトリに移動し、lsで中身を表示
 cdls() {
-  if [[ -d "$1" ]]; then
-    cd "$1" || return
-    ls
-  else
-    echo "$1 is not a valid directory"
-  fi
+    if [[ -d "$1" ]]; then
+        cd "$1" || return
+        ls
+    else
+        echo "$1 is not a valid directory"
+    fi
 }
 
 # ディレクトリがなければ作成して移動
 mcd() {
-  if [[ ! -d "$1" ]]; then
-    mkdir -p "$1"
-    cd "$1" || return
-  fi
+    if [[ ! -d "$1" ]]; then
+        mkdir -p "$1"
+        cd "$1" || return
+    fi
 }
 
 # ディレクトリを.bakとしてバックアップ
 backup() {
-  if [[ -d "$1" ]]; then
-    cp "$1"{,.bak}
-  fi
+    if [[ -d "$1" ]]; then
+        cp "$1"{,.bak}
+    fi
 }
 
 # ルートからファイル名をあいまい検索
 gfind() {
-  find / -iname "$@" 2>/dev/null
+    find / -iname "$@" 2>/dev/null
 }
 
 # カレントディレクトリ以下をあいまい検索
 lfind() {
-  find . -iname "$@" 2>/dev/null
+    find . -iname "$@" 2>/dev/null
 }
 
 # manで検索し、なければブラウザでGoogle検索
 search() {
-  if [[ $# -ne 1 ]]; then
-    echo "Usage: search <word>"
-    return 1
-  fi
+    if [[ $# -ne 1 ]]; then
+        echo "Usage: search <word>"
+        return 1
+    fi
 
-  man "$1" 2>/dev/null || "${BROWSER}" "http://www.google.com/search?q=\"$1\""
+    man "$1" 2>/dev/null || "${BROWSER}" "http://www.google.com/search?q=\"$1\""
 }
 
 # CSVファイルをSQLでクエリ実行
 sqlcsv() {
-  if [ $# -lt 2 ]
-  then
-    echo "Usage: sqlcsv [filename.csv] [SQL]"
-    echo "In the SQL, refer to the data sourse as [filename]"
-  else
-    filename="$1"
-    if [ ! -f "${filename}" ]; then
-      echo "${filename} not found"
-      return 1
-    fi
+    if [ $# -lt 2 ]; then
+        echo "Usage: sqlcsv [filename.csv] [SQL]"
+        echo "In the SQL, refer to the data sourse as [filename]"
+    else
+        filename="$1"
+        if [ ! -f "${filename}" ]; then
+            echo "${filename} not found"
+            return 1
+        fi
 
-    dataname=${filename%????}
-    sql_query="$2"
-    sqlite3 :memory: -cmd ".mode csv" \
-      -cmd ".import ${filename} ${dataname}" \
-      -cmd "${sql_query}"
-  fi
+        dataname=${filename%????}
+        sql_query="$2"
+        sqlite3 :memory: -cmd ".mode csv" \
+            -cmd ".import ${filename} ${dataname}" \
+            -cmd "${sql_query}"
+    fi
 }
 
 # 指定した列だけ抽出
 col() {
-  var_column="$1"
-  # shellcheck disable=SC2027,SC2086
-  awk "{print $"${var_column}"}"
-  # awk -v col="$1" "{print ${col}}"
+    var_column="$1"
+    # shellcheck disable=SC2027,SC2086
+    awk "{print $"${var_column}"}"
+    # awk -v col="$1" "{print ${col}}"
 }
 
 # curlで取得したスクリプトを一度エディタで開いてから実行
 curlsh() {
-  local file
+    local file
 
-  file=$(mktemp -t curlshXXXX) || { echo "Failed creating file"; return; }
-  curl -s "$1" > "${file}" || { echo "Failed to curl file"; return; }
-  "${EDITOR}" "${file}" || { echo "Editor quit with error code"; return; }
-  sh "${file}";
-  rm "${file}";
+    file=$(mktemp -t curlshXXXX) || {
+        echo "Failed creating file"
+        return
+    }
+    curl -s "$1" >"${file}" || {
+        echo "Failed to curl file"
+        return
+    }
+    "${EDITOR}" "${file}" || {
+        echo "Editor quit with error code"
+        return
+    }
+    sh "${file}"
+    rm "${file}"
 }
 
 # Rustファイルをコンパイルして実行
 rc() {
-  local filepath="$1"
-  local extension="${filepath##*.}"
-  if [[ ! "${extension}" == "rs" ]]; then
-    return 1
-  fi
+    local filepath="$1"
+    local extension="${filepath##*.}"
+    if [[ ! "${extension}" == "rs" ]]; then
+        return 1
+    fi
 
-  local name
+    local name
 
-  name=$(basename "$1" .rs)
-  rustc "${filepath}"
-  ./"${name}"
-  rm "${name}"
+    name=$(basename "$1" .rs)
+    rustc "${filepath}"
+    ./"${name}"
+    rm "${name}"
 }
 
 # LaTeX + BibTeX + PDF化
 bib() {
-  platex "$1"
-  pbibtex "$(basename "$1" .tex)"
-  platex "$1"
-  platex "$1"
-  #platex "$1"
-  dvipdfmx "$(basename "$1" .tex)"
+    platex "$1"
+    pbibtex "$(basename "$1" .tex)"
+    platex "$1"
+    platex "$1"
+    #platex "$1"
+    dvipdfmx "$(basename "$1" .tex)"
 }
 
 # https://sheerun.net/2014/03/21/how-to-boost-your-vim-productivity/
-fancy-ctrl-z () {
-  if [[ $(($#BUFFER)) -eq 0 ]]; then
-    BUFFER="fg"
-    zle accept-line
-  else
-    zle push-input
-    zle clear-screen
-  fi
+fancy-ctrl-z() {
+    if [[ $(($#BUFFER)) -eq 0 ]]; then
+        BUFFER="fg"
+        zle accept-line
+    else
+        zle push-input
+        zle clear-screen
+    fi
 }
 
 RED="\e[1;32m"
@@ -127,23 +135,23 @@ RESET="\e[0m"
 
 # manページの色付け
 man() {
-  env \
-    LESS_TERMCAP_mb="$(printf "\e[1;32m")" \
-    LESS_TERMCAP_md="$(printf "\e[1;32m")" \
-    LESS_TERMCAP_me="$(printf "\e[0m")" \
-    LESS_TERMCAP_se="$(printf "\e[0m")" \
-    LESS_TERMCAP_so="$(printf "\e[01;33m")" \
-    LESS_TERMCAP_ue="$(printf "\e[0m")" \
-    LESS_TERMCAP_us="$(printf "\e[1;4;31m")" \
-    man "$@"
+    env \
+        LESS_TERMCAP_mb="$(printf "\e[1;32m")" \
+        LESS_TERMCAP_md="$(printf "\e[1;32m")" \
+        LESS_TERMCAP_me="$(printf "\e[0m")" \
+        LESS_TERMCAP_se="$(printf "\e[0m")" \
+        LESS_TERMCAP_so="$(printf "\e[01;33m")" \
+        LESS_TERMCAP_ue="$(printf "\e[0m")" \
+        LESS_TERMCAP_us="$(printf "\e[1;4;31m")" \
+        man "$@"
 }
 
 # 1つ前のコミットにcheckout
 gn() {
-  git log --all --reverse --pretty=%H | \
-    grep -A1 "$(git rev-parse HEAD)" | \
-    tail -1 | \
-    xargs git checkout
+    git log --all --reverse --pretty=%H |
+        grep -A1 "$(git rev-parse HEAD)" |
+        tail -1 |
+        xargs git checkout
 }
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -155,240 +163,244 @@ export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap 
 
 # fzfでブランチ選択してcheckout
 fbr() {
-  local branches branch
-  branches=$(git branch --all | grep -v HEAD) &&
-    branch=$(echo "${branches}" |
-    fzf-tmux -d $(( 2 + $(wc -l <<< "${branches}") )) +m) &&
-    git checkout "$(echo "${branch}" | sed 's/.* //' | sed 's#remotes/[^/]*/##')"
+    local branches branch
+    branches=$(git branch --all | grep -v HEAD) &&
+        branch=$(echo "${branches}" |
+            fzf-tmux -d $((2 + $(wc -l <<<"${branches}"))) +m) &&
+        git checkout "$(echo "${branch}" | sed 's/.* //' | sed 's#remotes/[^/]*/##')"
 }
 
 # fzfでgitログをブラウズ・diff
 fshow() {
-  local out shas sha q k
+    local out shas sha q k
 
-  FZF_DEFAULT_OPTS="--height 90% --reverse --border --ansi"
-  while out=$(
-    git log --graph --color=always \
-      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-      fzf --multi --no-sort --query="${q}" \
-      --print-query --expect=ctrl-d); do
-    q=$(head -1 <<< "${out}")
-    k=$(head -2 <<< "${out}" | tail -1)
-    shas=$(sed "1,2d;s/^[^a-z0-9]*//;/^$/d" <<< "${out}" | awk "{print $1}")
-    [ -z "${shas}" ] && continue
-    if [ "${k}" = ctrl-d ]; then
-      git diff --color=always "${shas}" | cat
-    else
-      for sha in ${shas}; do
-        git show --color=always "${sha}" | cat
-      done
-    fi
-  done
+    FZF_DEFAULT_OPTS="--height 90% --reverse --border --ansi"
+    while out=$(
+        git log --graph --color=always \
+            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+            fzf --multi --no-sort --query="${q}" \
+                --print-query --expect=ctrl-d
+    ); do
+        q=$(head -1 <<<"${out}")
+        k=$(head -2 <<<"${out}" | tail -1)
+        shas=$(sed "1,2d;s/^[^a-z0-9]*//;/^$/d" <<<"${out}" | awk "{print $1}")
+        [ -z "${shas}" ] && continue
+        if [ "${k}" = ctrl-d ]; then
+            git diff --color=always "${shas}" | cat
+        else
+            for sha in ${shas}; do
+                git show --color=always "${sha}" | cat
+            done
+        fi
+    done
 }
 
 # zコマンドの履歴からディレクトリ移動
 fzf-z-search() {
-  local res
+    local res
 
-  res=$(z | sort -rn | cut -c 12- | fzf)
-  if [ -n "$res" ]; then
-    BUFFER+="cd $res"
-    zle accept-line
-  else
-    return 1
-  fi
+    res=$(z | sort -rn | cut -c 12- | fzf)
+    if [ -n "$res" ]; then
+        BUFFER+="cd $res"
+        zle accept-line
+    else
+        return 1
+    fi
 }
 
 # https://zenn.dev/k4zu/scraps/58907ad402b02c
 # fzfでファイル選択してbatで中身表示
-fcat (){
-  local selected
+fcat() {
+    local selected
 
-  if [ $# = 0 ];then
-    selected=$(fd --color=always -t f | fzf)
-  else
-    if [ -f "$0" ]; then
-      selected=$1
+    if [ $# = 0 ]; then
+        selected=$(fd --color=always -t f | fzf)
     else
-      selected=$(fd --color=always -t f | \
-        fzf --query "$0")
+        if [ -f "$0" ]; then
+            selected=$1
+        else
+            selected=$(fd --color=always -t f |
+                fzf --query "$0")
+        fi
     fi
-  fi
 
-  if [ -n "${selected}" ];then
-    print -s "bat ${selected}"
-    bat "${selected}"
-  else
-    # echo "No file is selected"
-    false
-  fi
+    if [ -n "${selected}" ]; then
+        print -s "bat ${selected}"
+        bat "${selected}"
+    else
+        # echo "No file is selected"
+        false
+    fi
 }
 
 # https://stackoverflow.com/questions/65366464/is-there-a-way-to-cancel-fzf-by-pressing-escape
 vf() {
-  local file_name
+    local file_name
 
-  file_name=$(fzf) || return
-  nvim "${file_name}"
+    file_name=$(fzf) || return
+    nvim "${file_name}"
 }
 
 # fzfでディレクトリ選択してcd
 fcd() {
-  local dir_name
+    local dir_name
 
-  dir_name=$(fd --type d | fzf) || return
-  cd "${dir_name}" || return
+    dir_name=$(fd --type d | fzf) || return
+    cd "${dir_name}" || return
 }
 
 # 任意コミットのファイルをfzfで選択して中身表示
 fgf() {
-  if [ ! -d ".git" ]; then
-    echo "Not in a git repository."
-    return
-  fi
+    if [ ! -d ".git" ]; then
+        echo "Not in a git repository."
+        return
+    fi
 
-  local reply commit_id file_lists file
+    local reply commit_id file_lists file
 
-  fzf_result=$(git log --graph --color=always \
-    --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" | \
-    fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort \
-      --expect=enter,ctrl-c,esc)
+    fzf_result=$(git log --graph --color=always \
+        --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+        fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort \
+            --expect=enter,ctrl-c,esc)
 
-  reply=$(echo "${fzf_result}" | head -1)
-  commit_id=$(echo "${fzf_result}" | grep -o "[a-f0-9]\{7\}")
-  [[ -z "${commit_id}" ]] && return
+    reply=$(echo "${fzf_result}" | head -1)
+    commit_id=$(echo "${fzf_result}" | grep -o "[a-f0-9]\{7\}")
+    [[ -z "${commit_id}" ]] && return
 
-  case "${reply}" in
+    case "${reply}" in
     enter) ;;
     ctrl-c) return ;;
     esc) return ;;
     *) ;;
-  esac
+    esac
 
-  file_lists=$(git diff --name-only "${commit_id}")
-  fzf_result=$(echo "${file_lists}" | \
-    fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort \
-      --expect=enter,ctrl-c,esc)
+    file_lists=$(git diff --name-only "${commit_id}")
+    fzf_result=$(echo "${file_lists}" |
+        fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort \
+            --expect=enter,ctrl-c,esc)
 
-  reply=$(echo "${fzf_result}" | head -1)
-  file=$(echo "${fzf_result}" | head -2 | tail -1)
+    reply=$(echo "${fzf_result}" | head -1)
+    file=$(echo "${fzf_result}" | head -2 | tail -1)
 
-  case "${reply}" in
+    case "${reply}" in
     enter) ;;
     ctrl-c) return ;;
-    esc) fgf "$@"; return ;;
+    esc)
+        fgf "$@"
+        return
+        ;;
     *) echo $? ;;
-  esac
+    esac
 
-  echo "${commit_id} ${file}"
-  git show "${commit_id}":"${file}"
+    echo "${commit_id} ${file}"
+    git show "${commit_id}":"${file}"
 }
 
 # gitで変更済みファイルをfzfで選択
 fga() {
-  local modified_files selected_files
-  modified_files=$(git status --short | awk "{if ($1 == 'M') {print $2}}") &&
-    selected_files=$(echo "${modified_files}" | fzf -m)
-  echo "${selected_files}"
+    local modified_files selected_files
+    modified_files=$(git status --short | awk "{if ($1 == 'M') {print $2}}") &&
+        selected_files=$(echo "${modified_files}" | fzf -m)
+    echo "${selected_files}"
 }
 
 # fzfでカレントディレクトリのファイルをプレビュー
 fpre() {
-  fd --type f --hidden --follow --exclude .git | fzf
+    fd --type f --hidden --follow --exclude .git | fzf
 }
 
 # GitHub Actions workflowを実行
 gh-run() {
-  if [[ $# != 1 ]]; then
-    echo "Usage: gh-run <workflow>"
-    return 1
-  fi
+    if [[ $# != 1 ]]; then
+        echo "Usage: gh-run <workflow>"
+        return 1
+    fi
 
-  workflow="$1"
-  gh workflow run .github/workflows/"${workflow}" --ref "$(git branch --show-current)"
+    workflow="$1"
+    gh workflow run .github/workflows/"${workflow}" --ref "$(git branch --show-current)"
 }
 
 # GitHub Actions workflowの最新実行をwatch
 gh-watch() {
-  if [[ $# != 1 ]]; then
-    echo "Usage: gh-watch <workflow>"
-    return 1
-  fi
+    if [[ $# != 1 ]]; then
+        echo "Usage: gh-watch <workflow>"
+        return 1
+    fi
 
-  workflow="$1"
-  gh run list --workflow="${workflow}" | \
-    grep "$(git branch --show-current)" | \
-    cut -f 7 | \
-    head -n 1 | \
-    xargs gh run watch
+    workflow="$1"
+    gh run list --workflow="${workflow}" |
+        grep "$(git branch --show-current)" |
+        cut -f 7 |
+        head -n 1 |
+        xargs gh run watch
 }
 
 # GitHub Actions workflowの最新実行をview
 gh-view() {
-  if [[ $# != 1 ]]; then
-    echo "Usage: gh-view <workflow>"
-    return 1
-  fi
+    if [[ $# != 1 ]]; then
+        echo "Usage: gh-view <workflow>"
+        return 1
+    fi
 
-  workflow="$1"
-  gh run list --workflow="${workflow}" | \
-    grep "$(git branch --show-current)" | \
-    cut -f 7 | \
-    head -n 1 | \
-    xargs gh run view
+    workflow="$1"
+    gh run list --workflow="${workflow}" |
+        grep "$(git branch --show-current)" |
+        cut -f 7 |
+        head -n 1 |
+        xargs gh run view
 }
 
 # GitHub Actions workflowのログを表示
 gh-log() {
-  if [[ $# != 1 ]]; then
-    echo "Usage: gh-log <workflow>"
-    return 1
-  fi
+    if [[ $# != 1 ]]; then
+        echo "Usage: gh-log <workflow>"
+        return 1
+    fi
 
-  workflow="$1"
-  gh run list --workflow="${workflow}" | \
-    grep "$(git branch --show-current)" | \
-    cut -f 7 | \
-    head -n 1 | \
-    xargs gh run view --log
+    workflow="$1"
+    gh run list --workflow="${workflow}" |
+        grep "$(git branch --show-current)" |
+        cut -f 7 |
+        head -n 1 |
+        xargs gh run view --log
 }
 
 # fzfでGitHubリポジトリを選択してwebで開く
 ghv() {
-  local repo
+    local repo
 
-  repo=$(gh repo list "$1" --json nameWithOwner -q '.[].nameWithOwner' | fzf)
+    repo=$(gh repo list "$1" --json nameWithOwner -q '.[].nameWithOwner' | fzf)
 
-  if [[ -z "${repo}" ]]; then
-    return
-  fi
+    if [[ -z "${repo}" ]]; then
+        return
+    fi
 
-  gh repo view --web "${repo}"
+    gh repo view --web "${repo}"
 }
 
 # fzfでPRを選択してcheckout
 ghp() {
-  selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
-  pr_number=$(echo "${selected_pr}" | awk '{print $1}')
-  if [ -n "${pr_number}" ]; then
-    gh co "${pr_number}"
-  else
-    echo "PRが選択されませんでした"
-  fi
+    selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
+    pr_number=$(echo "${selected_pr}" | awk '{print $1}')
+    if [ -n "${pr_number}" ]; then
+        gh co "${pr_number}"
+    else
+        echo "PRが選択されませんでした"
+    fi
 }
 
 # fzfでPRを選択してwebで表示
 ghpv() {
-  selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
-  pr_number=$(echo "${selected_pr}" | awk '{print $1}')
-  if [ -n "${pr_number}" ]; then
-    gh pr view -w "${pr_number}"
-  else
-    echo "PRが選択されませんでした"
-  fi
+    selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
+    pr_number=$(echo "${selected_pr}" | awk '{print $1}')
+    if [ -n "${pr_number}" ]; then
+        gh pr view -w "${pr_number}"
+    else
+        echo "PRが選択されませんでした"
+    fi
 }
 
 # Copilot CLIのラッパー
 ghco() {
-  gh copilot suggest -t shell "$@"
+    gh copilot suggest -t shell "$@"
 }
