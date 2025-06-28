@@ -11,9 +11,9 @@ DOTFILES_PATH="${DOTFILES_PATH:-${HOME}/dotfiles}"
 if [[ "$OSTYPE" == "darwin"* ]]; then
     echo "Detected macOS. Starting setup..."
     if ! xcode-select -p &>/dev/null; then
-      xcode-select --install
+        xcode-select --install
     fi
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install git
 
     git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
