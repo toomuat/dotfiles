@@ -143,3 +143,10 @@ vim.api.nvim_exec([[
 -- leaderキーを<Space>に設定
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+
+-- 永続的なアンドゥを有効にする
+vim.opt.undofile = true
+vim.opt.undodir = vim.fn.stdpath("data") .. "/undo"
+if vim.fn.isdirectory(vim.opt.undodir:get()) == 0 then
+  vim.fn.mkdir(vim.opt.undodir:get(), "p")
+end "
