@@ -68,6 +68,10 @@ bindkey "^s" history-incremental-pattern-search-forward
 bindkey "^Z" fancy-ctrl-z
 bindkey "\e[3~" delete-char
 
+# 入力中の文字列で履歴をフィルタリングして遡る
+bindkey "^[[A" history-beginning-search-backward # 上矢印キー
+bindkey "^[[B" history-beginning-search-forward # 下矢印キー
+
 # zleウィジェット登録
 zle -N fancy-ctrl-z
 zle -N fzf-z-search
