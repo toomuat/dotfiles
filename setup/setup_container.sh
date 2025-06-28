@@ -15,19 +15,22 @@ apt upgrade -y
 
 apt install -y \
     git zsh tmux wget cmake build-essential python3 \
-    python3-pip unzip
+    python3-pip unzip stow
 
 chsh -s "$(command -v zsh)"
-# chmod +x /usr/share/doc/git/contrib/diff-highlight/diff-highlight
-# ln -s /usr/share/doc/git/contrib/diff-highlight/diff-highlight \
-#   /usr/local/bin/diff-highlight
-python3 -m pip install diff-highlight --break-system-packages
+sudo chmod +x /usr/share/doc/git/contrib/diff-highlight/diff-highlight
+sudo ln -s /usr/share/doc/git/contrib/diff-highlight/diff-highlight \
+    /usr/local/bin/diff-highlight
 
 DOTFILES_URL=https://github.com/toomuat/dotfiles
 DOTFILES_PATH="${DOTFILES_PATH:-${HOME}/dotfiles}"
 
 git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
-/bin/bash "${DOTFILES_PATH}"/link.sh
+
+mkdir -p "${HOME}"/.config
+cd "${DOTFILES_PATH}"
+stow git nvim tmux zsh wezterm
+cd -
 
 # zinit
 set +e
