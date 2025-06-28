@@ -148,9 +148,9 @@ man() {
 
 # 1つ前のコミットにcheckout
 gn() {
-    git log --all --reverse --pretty=%H |
-        grep -A1 "$(git rev-parse HEAD)" |
-        tail -1 |
+    git log --all --reverse --pretty=%H |\
+        grep -A1 "$(git rev-parse HEAD)" |\
+        tail -1 |\
         xargs git checkout
 }
 
@@ -164,9 +164,9 @@ export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap 
 # fzfでブランチ選択してcheckout
 fbr() {
     local branches branch
-    branches=$(git branch --all | grep -v HEAD) &&
-        branch=$(echo "${branches}" |
-            fzf-tmux -d $((2 + $(wc -l <<<"${branches}"))) +m) &&
+    branches=$(git branch --all | grep -v HEAD) &&\
+        branch=$(echo "${branches}" |\
+            fzf-tmux -d $((2 + $(wc -l <<<"${branches}"))) +m) &&\
         git checkout "$(echo "${branch}" | sed 's/.* //' | sed 's#remotes/[^/]*/##')"
 }
 
@@ -175,9 +175,9 @@ fshow() {
     local out shas sha q k
 
     FZF_DEFAULT_OPTS="--height 90% --reverse --border --ansi"
-    while out=$(
+    while out=$( \
         git log --graph --color=always \
-            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |\
             fzf --multi --no-sort --query="${q}" \
                 --print-query --expect=ctrl-d
     ); do
@@ -219,7 +219,7 @@ fcat() {
         if [ -f "$0" ]; then
             selected=$1
         else
-            selected=$(fd --color=always -t f |
+            selected=$(fd --color=always -t f |\
                 fzf --query "$0")
         fi
     fi
@@ -259,7 +259,7 @@ fgf() {
     local reply commit_id file_lists file
 
     fzf_result=$(git log --graph --color=always \
-        --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+        --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |\
         fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort \
             --expect=enter,ctrl-c,esc)
 
@@ -275,7 +275,7 @@ fgf() {
     esac
 
     file_lists=$(git diff --name-only "${commit_id}")
-    fzf_result=$(echo "${file_lists}" |
+    fzf_result=$(echo "${file_lists}" |\
         fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort \
             --expect=enter,ctrl-c,esc)
 
@@ -299,7 +299,7 @@ fgf() {
 # gitで変更済みファイルをfzfで選択
 fga() {
     local modified_files selected_files
-    modified_files=$(git status --short | awk "{if ($1 == 'M') {print $2}}") &&
+    modified_files=$(git status --short | awk "{if ($1 == 'M') {print $2}}") &&\
         selected_files=$(echo "${modified_files}" | fzf -m)
     echo "${selected_files}"
 }
@@ -328,10 +328,10 @@ gh-watch() {
     fi
 
     workflow="$1"
-    gh run list --workflow="${workflow}" |
-        grep "$(git branch --show-current)" |
-        cut -f 7 |
-        head -n 1 |
+    gh run list --workflow="${workflow}" |\
+        grep "$(git branch --show-current)" |\
+        cut -f 7 |\
+        head -n 1 |\
         xargs gh run watch
 }
 
@@ -343,10 +343,10 @@ gh-view() {
     fi
 
     workflow="$1"
-    gh run list --workflow="${workflow}" |
-        grep "$(git branch --show-current)" |
-        cut -f 7 |
-        head -n 1 |
+    gh run list --workflow="${workflow}" |\
+        grep "$(git branch --show-current)" |\
+        cut -f 7 |\
+        head -n 1 |\
         xargs gh run view
 }
 
@@ -358,10 +358,10 @@ gh-log() {
     fi
 
     workflow="$1"
-    gh run list --workflow="${workflow}" |
-        grep "$(git branch --show-current)" |
-        cut -f 7 |
-        head -n 1 |
+    gh run list --workflow="${workflow}" |\
+        grep "$(git branch --show-current)" |\
+        cut -f 7 |\
+        head -n 1 |\
         xargs gh run view --log
 }
 
@@ -403,4 +403,29 @@ ghpv() {
 # Copilot CLIのラッパー
 ghco() {
     gh copilot suggest -t shell "$@"
+}
+
+# tmuxの画面を分割する関数
+tmux_split_layout() {
+    # まず左右に分割 (左3:右7の比率)
+    tmux split-window -h -p 70
+
+    # 左側のペイン（ペイン1）を選択して4分割 (均等に)
+    tmux select-pane -t 1
+    tmux split-window -v -p 75
+    tmux select-pane -t 2
+    tmux split-window -v -p 66
+    tmux select-pane -t 3
+    tmux split-window -v -p 50
+
+    # 右側のペイン（ペイン5）を選択して上下に分割
+    tmux select-pane -t 5
+    tmux split-window -v -p 25
+
+    # 右下のペインを左右に分割
+    tmux select-pane -t 6
+    tmux split-window -h
+
+    # 最初のペインを選択してアタッチ
+    tmux select-pane -t 1
 }
