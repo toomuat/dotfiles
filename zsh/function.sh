@@ -170,31 +170,6 @@ fbr() {
         git checkout "$(echo "${branch}" | sed 's/.* //' | sed 's#remotes/[^/]*/##')"
 }
 
-# fzfでgitログをブラウズ・diff
-fshow() {
-    local out shas sha q k
-
-    FZF_DEFAULT_OPTS="--height 90% --reverse --border --ansi"
-    while out=$(
-        git log --graph --color=always \
-            --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-            fzf --multi --no-sort --query="${q}" \
-                --print-query --expect=ctrl-d
-    ); do
-        q=$(head -1 <<<"${out}")
-        k=$(head -2 <<<"${out}" | tail -1)
-        shas=$(sed "1,2d;s/^[^a-z0-9]*//;/^$/d" <<<"${out}" | awk "{print $1}")
-        [ -z "${shas}" ] && continue
-        if [ "${k}" = ctrl-d ]; then
-            git diff --color=always "${shas}" | cat
-        else
-            for sha in ${shas}; do
-                git show --color=always "${sha}" | cat
-            done
-        fi
-    done
-}
-
 # zコマンドの履歴からディレクトリ移動
 fzf-z-search() {
     local res
@@ -294,14 +269,6 @@ fgf() {
 
     echo "${commit_id} ${file}"
     git show "${commit_id}":"${file}"
-}
-
-# gitで変更済みファイルをfzfで選択
-fga() {
-    local modified_files selected_files
-    modified_files=$(git status --short | awk "{if ($1 == 'M') {print $2}}") &&
-        selected_files=$(echo "${modified_files}" | fzf -m)
-    echo "${selected_files}"
 }
 
 # fzfでカレントディレクトリのファイルをプレビュー
