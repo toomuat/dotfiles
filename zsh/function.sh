@@ -419,3 +419,59 @@ ghqcd() {
         cd "$(ghq root)/${selected_repo}" || return
     fi
 }
+
+# fzfで関数をコメント付きで検索し、選択した関数名をクリップボードにコピーする
+ffunc-preview() {
+    # 検索対象のファイルを列挙する
+    # 他にも関数を定義しているファイルがあればここに追加してください
+    local zsh_files=(
+        "/Users/t.onai/dotfiles/zsh/function.sh"
+        "/Users/t.onai/dotfiles/zsh/alias.sh"
+        "/Users/t.onai/dotfiles/zsh/.zshrc"
+    )
+
+    # awkスクリプトでコメントと関数を抽出し、fzfに渡す
+    # 選択された行から関数名だけを抜き出してクリップボードにコピーする
+    local selected_func
+    selected_func=$(awk '
+        # 関数定義のパターンに一致した場合 (例: my_func() { )
+        /^[a-zA-Z0-9_-]+[[:space:]]*\([[:space:]]*\)[[:space:]]*\{?$/ {
+            # 関数名だけを抽出する
+            func_name = $0
+            sub(/[[:space:]]*\([[:space:]]*\)[[:space:]]*\{?$/, "", func_name)
+
+            # それまでに溜めたコメントがあれば、それも一緒に出力
+            if (comment_buffer) {
+                # コメントの先頭の # とスペースを削除して整形
+                gsub(/^[[:space:]]*#[[:space:]]*/, "", comment_buffer)
+                printf "%-35s --- %s\n", func_name, comment_buffer
+            } else {
+                printf "%-35s\n", func_name
+            }
+            # バッファをリセット
+            comment_buffer = ""
+            next
+        }
+        # コメント行のパターンに一致した場合
+        /^[[:space:]]*#/ {
+            # コメントをバッファに溜める
+            if (comment_buffer) {
+                comment_buffer = comment_buffer " " $0
+            } else {
+                comment_buffer = $0
+            }
+            next
+        }
+        # コメントでも関数定義でもない行が来たらバッファをリセット
+        { comment_buffer = "" }
+    ' "${zsh_files[@]}" | fzf)
+
+    # fzfで何かが選択された場合
+    if [[ -n "$selected_func" ]]; then
+        # "---" の前にある関数名部分だけを切り出してコピー
+        local func_to_copy
+        func_to_copy=$(echo "$selected_func" | awk '{print $1}')
+        echo -n "$func_to_copy" | pbcopy
+        echo "Copied '''$func_to_copy''' to clipboard."
+    fi
+}
