@@ -67,7 +67,7 @@ sqlcsv() {
 col() {
     var_column="$1"
     # shellcheck disable=SC2027,SC2086
-    awk "{print $"${var_column}"}"
+    awk "{print "${var_column}"}"
     # awk -v col="$1" "{print ${col}}"
 }
 
@@ -239,7 +239,7 @@ fgf() {
             --expect=enter,ctrl-c,esc)
 
     reply=$(echo "${fzf_result}" | head -1)
-    commit_id=$(echo "${fzf_result}" | grep -o "[a-f0-9]\{7\}")
+    commit_id=$(echo "${fzf_result}" | grep -o "[a-f0-9]\\{7\\}")
     [[ -z "${commit_id}" ]] && return
 
     case "${reply}" in
@@ -408,5 +408,14 @@ fkill() {
 
     if [ "x$pid" != "x" ]; then
         echo "$pid" | xargs kill -"${2:-9}"
+    fi
+}
+
+# ghqで管理されているリポジトリをfzfで選択してcd
+ghqcd() {
+    local selected_repo
+    selected_repo=$(ghq list | fzf)
+    if [ -n "${selected_repo}" ]; then
+        cd "$(ghq root)/${selected_repo}" || return
     fi
 }
