@@ -46,6 +46,16 @@ setopt auto_param_keys
 setopt hist_ignore_all_dups
 # プロンプト文字列内で変数展開やコマンド置換を可能にする
 setopt prompt_subst
+# コマンドのスペルミスを自動的に修正する
+setopt correct
+# コマンドと引数の両方のスペルミスを自動的に修正する
+setopt correct_all
+# グロブ展開で拡張パターンマッチングを有効にする
+setopt extended_glob
+# スペースで始まるコマンドを履歴に保存しない
+setopt hist_ignore_space
+# インタラクティブシェルで # から始まる行をコメントとして扱う
+setopt interactive_comments
 
 # WORDCHARSから'/'と'='を除外（単語区切りの挙動調整）
 typeset -g WORDCHARS=${WORDCHARS:s@/@@:s@=@@}
@@ -87,8 +97,8 @@ bindkey "^Z" fancy-ctrl-z
 bindkey "\e[3~" delete-char
 
 # 入力中の文字列で履歴をフィルタリングして遡る
-bindkey "^[[A" history-beginning-search-backward # 上矢印キー
-bindkey "^[[B" history-beginning-search-forward # 下矢印キー
+bindkey "^[[A" history-search-backward # 上矢印キー
+bindkey "^[[B" history-search-forward # 下矢印キー
 
 # zleウィジェット登録
 zle -N fancy-ctrl-z
