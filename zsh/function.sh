@@ -157,7 +157,7 @@ gn() {
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export FZF_DEFAULT_COMMAND="fd --type file --hidden --follow --exclude .git --color=always"
-export FZF_DEFAULT_OPTS="--height 90% --reverse --border --ansi --preview 'bat --color=always {}' --bind alt-p:preview-up,alt-n:preview-down"
+export FZF_DEFAULT_OPTS="--height 90% --reverse --border --ansi --no-preview --bind alt-p:preview-up,alt-n:preview-down"
 export FZF_ALT_C_OPTS="--reverse --preview 'tree -C {} | head -200'"
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 
@@ -189,7 +189,7 @@ fcat() {
     local selected
 
     if [ $# = 0 ]; then
-        selected=$(fd --color=always -t f | fzf)
+        selected=$(fd --color=always -t f | fzf --preview 'bat --color=always {}')
     else
         if [ -f "$0" ]; then
             selected=$1
@@ -233,10 +233,9 @@ fgf() {
 
     local reply commit_id file_lists file
 
-    fzf_result=$(git log --graph --color=always \
-        --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
-        fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort \
-            --expect=enter,ctrl-c,esc)
+    fzf_result=$(
+        git log --graph --color=always             --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |            fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort        --expect=enter,ctrl-c,esc --preview 'git show --color=always {}'
+    )
 
     reply=$(echo "${fzf_result}" | head -1)
     commit_id=$(echo "${fzf_result}" | grep -o "[a-f0-9]\\{7\\}")
@@ -250,9 +249,11 @@ fgf() {
     esac
 
     file_lists=$(git diff --name-only "${commit_id}")
-    fzf_result=$(echo "${file_lists}" |
-        fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort \
-            --expect=enter,ctrl-c,esc)
+    fzf_result=$(
+        echo "${file_lists}" |
+            fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort
+        --expect=enter,ctrl-c,esc --preview 'bat --color=always {}'
+    )
 
     reply=$(echo "${fzf_result}" | head -1)
     file=$(echo "${fzf_result}" | head -2 | tail -1)
@@ -273,7 +274,7 @@ fgf() {
 
 # fzfでカレントディレクトリのファイルをプレビュー
 fpre() {
-    fd --type f --hidden --follow --exclude .git | fzf
+    fd --type f --hidden --follow --exclude .git | fzf --preview 'bat --color=always {}'
 }
 
 # GitHub Actions workflowを実行
@@ -347,7 +348,7 @@ ghv() {
 
 # fzfでPRを選択してcheckout
 ghp() {
-    selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
+    selected_pr=$(gh pr list --limit 100 | fzf --preview 'gh pr view {} --json body --template "{{.body}}"')
     pr_number=$(echo "${selected_pr}" | awk '{print $1}')
     if [ -n "${pr_number}" ]; then
         gh co "${pr_number}"
@@ -358,7 +359,7 @@ ghp() {
 
 # fzfでPRを選択してwebで表示
 ghpv() {
-    selected_pr=$(gh pr list --limit 100 | fzf --no-preview)
+    selected_pr=$(gh pr list --limit 100 | fzf --preview 'gh pr view {} --json body --template "{{.body}}"')
     pr_number=$(echo "${selected_pr}" | awk '{print $1}')
     if [ -n "${pr_number}" ]; then
         gh pr view -w "${pr_number}"
@@ -401,7 +402,7 @@ tmux_split_layout() {
 fkill() {
     local pid
     if [ "$UID" != "0" ]; then
-        pid=$(ps -f -u $UID | sed 1d | fzf -m -q "$1" --no-preview | awk '{print $2}')
+        pid=$(ps -f -u $UID | sed 1d | fzf -m -q "$1" --preview 'ps -fp {}' | awk '{print $2}')
     else
         pid=$(ps -ef | sed 1d | fzf -m -q "$1" | awk '{print $2}')
     fi
