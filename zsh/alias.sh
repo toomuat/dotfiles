@@ -28,6 +28,7 @@ alias ns="npm start"
 alias nt="npm test"
 alias o="open"
 alias p="pwd"
+alias rg='rg --hidden --glob "!**/.git/*" --glob "!**/node_modules/*" --glob "!**/dist/*"'
 alias tm="tmux"
 alias tma="tmux attach"
 alias tmk="tmux kill-server"

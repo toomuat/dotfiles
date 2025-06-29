@@ -234,7 +234,7 @@ fgf() {
     local reply commit_id file_lists file
 
     fzf_result=$(
-        git log --graph --color=always             --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |            fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort        --expect=enter,ctrl-c,esc --preview 'git show --color=always {}'
+        git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" | fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort --expect=enter,ctrl-c,esc --preview 'git show --color=always {}'
     )
 
     reply=$(echo "${fzf_result}" | head -1)
@@ -251,8 +251,7 @@ fgf() {
     file_lists=$(git diff --name-only "${commit_id}")
     fzf_result=$(
         echo "${file_lists}" |
-            fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort
-        --expect=enter,ctrl-c,esc --preview 'bat --color=always {}'
+            fzf <(echo "${file_lists}") --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort --expect=enter,ctrl-c,esc --preview 'bat --color=always {}'
     )
 
     reply=$(echo "${fzf_result}" | head -1)
