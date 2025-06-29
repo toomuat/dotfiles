@@ -29,14 +29,21 @@ return {
 			{
 				";b",
 				function()
-					require("telescope.builtin").current_buffer_fuzzy_find({ theme = "dropdown", sorting_strategy = "ascending" })
+					require("telescope.builtin").current_buffer_fuzzy_find({
+						theme = "dropdown",
+						sorting_strategy = "ascending",
+					})
 				end,
 				desc = "現在バッファ内ファジー検索",
 			},
 			{
 				";f",
 				function()
-					require("telescope.builtin").find_files({ no_ignore = false, hidden = true, initial_mode = "normal" })
+					require("telescope.builtin").find_files({
+						no_ignore = false,
+						hidden = true,
+						initial_mode = "normal",
+					})
 				end,
 				desc = "ファイル検索(隠し含む)",
 			},
@@ -123,6 +130,14 @@ return {
 				end,
 				desc = "カレントディレクトリでファイルブラウザ",
 			},
+			{
+				"<leader>sw",
+				function()
+					local word = vim.fn.expand("<cword>")
+					require("telescope.builtin").live_grep({ default_text = word })
+				end,
+				desc = "カーソル下の単語をGrep検索",
+			},
 		},
 		opts = function()
 			return {
@@ -141,6 +156,14 @@ return {
 						"--column",
 						"--smart-case",
 						"--hidden",
+						"--glob",
+						"!node_modules/*",
+						"--glob",
+						"!dist/*",
+						"--glob",
+						"!build/*",
+						"--glob",
+						"!target/*",
 					},
 				},
 				pickers = {
