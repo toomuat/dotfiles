@@ -87,20 +87,31 @@ zinit snippet https://github.com/rupa/z/blob/master/z.sh
 
 # キーバインド設定
 # `binkey -L` で一覧表示可能
+# Emacs風のキーバインドモードを設定
 bindkey -e
+# Ctrl-f でカーソルを1文字分前に移動
 bindkey "^f" forward-char
+# Ctrl-; でfzf-z-searchウィジェットを実行
+# (zコマンド履歴からfzfでディレクトリ検索)
 bindkey "^;" fzf-z-search
+# Ctrl-o で複数行のコマンド入力時に次の行に移動、
+# または履歴の次のエントリに移動
 bindkey "^o" down-line-or-history
+# Ctrl-r で履歴をインクリメンタルに逆方向検索
 # bindkey "^r" history-incremental-pattern-search-backward
+# Ctrl-s で履歴をインクリメンタルに順方向検索
 bindkey "^s" history-incremental-pattern-search-forward
+# Ctrl-Z でfancy-ctrl-zウィジェットを実行
+# (フォアグラウンドに戻すか、入力を一時保存して画面クリア)
 bindkey "^Z" fancy-ctrl-z
+# Deleteキーでカーソル位置の文字を削除
 bindkey "\e[3~" delete-char
 
 # 入力中の文字列で履歴をフィルタリングして遡る
 bindkey "^[[A" history-search-backward # 上矢印キー
 bindkey "^[[B" history-search-forward # 下矢印キー
 
-# zleウィジェット登録
+# zle(Zsh Line Editor) ウィジェット登録
 zle -N fancy-ctrl-z
 zle -N fzf-z-search
 
