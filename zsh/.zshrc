@@ -14,20 +14,37 @@ source "${DOTFILES_PATH}"/zsh/function.sh
 source "${DOTFILES_PATH}"/zsh/prompt.sh
 source "${DOTFILES_PATH}"/zsh/variable.sh
 
+# setopt で設定できるオプションは `man zshoptions`で確認できる
+#
 # ヒストリ関連のzshオプション
 # 履歴を追記・共有・即時反映など
+# コマンド履歴をセッション終了時に既存の履歴ファイルに追加する
 setopt appendhistory
+# 複数のZshセッション間で履歴を共有する
 setopt sharehistory
+# コマンド実行後すぐに履歴ファイルに書き込む（履歴の即時共有を可能にする）
 setopt incappendhistory
+# ディレクトリ名のみを入力した場合に自動的にそのディレクトリへ移動する
 setopt auto_cd
+# cdコマンドでディレクトリを移動した際に、自動的にディレクトリスタックにプッシュする
 setopt auto_pushd
+# ディレクトリスタックに重複するエントリを追加しない
 setopt pushd_ignore_dups
+# コマンドラインで引数として指定されたディレクトリの末尾に自動的にスラッシュを追加する
 setopt auto_param_slash
+# 補完候補を表示する際に、ファイルの種類（ディレクトリ、実行可能ファイルなど）を示す記号を表示する
 setopt list_types
+# 単語の途中でも補完を可能にする（例: `doc` と入力して `documents` を補完）
 setopt complete_in_word
+# エラーや補完候補がない場合にビープ音を鳴らさない
 setopt no_beep
+# コマンドラインの引数として指定されたファイル名やディレクトリ名に対して、自動的にワイルドカード展開を行う
+# このオプションは `auto_param_keys` ではなく `auto_param_keys` は存在しないか、非常に古いZshのバージョンにのみ存在する可能性があります。
+# 一般的には `auto_param_slash` や `auto_name_dirs` などが関連します。もし意図が異なる場合はご確認ください。
 setopt auto_param_keys
+# 履歴から重複するコマンドを削除する（連続する重複だけでなく、履歴全体から）
 setopt hist_ignore_all_dups
+# プロンプト文字列内で変数展開やコマンド置換を可能にする
 setopt prompt_subst
 
 # WORDCHARSから'/'と'='を除外（単語区切りの挙動調整）
