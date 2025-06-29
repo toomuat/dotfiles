@@ -150,3 +150,37 @@ vim.opt.undodir = vim.fn.stdpath("data") .. "/undo"
 if vim.fn.isdirectory(vim.opt.undodir.value) == 0 then
   vim.fn.mkdir(vim.opt.undodir.value, "p")
 end
+
+-- 追加のパフォーマンス向上設定
+vim.opt.history = 1000
+vim.opt.timeoutlen = 500
+vim.opt.ttimeoutlen = 10
+
+-- より良い補完体験
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
+vim.opt.pumheight = 15
+
+-- 検索関連の改善
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.incsearch = true
+
+-- 表示関連の改善
+vim.opt.termguicolors = true
+vim.opt.cursorline = true
+vim.opt.list = true
+vim.opt.listchars = {
+  tab = "  ",
+  trail = "·",
+  extends = "»",
+  precedes = "«",
+  nbsp = "␣",
+}
+
+-- ファイル関連
+vim.opt.hidden = true
+vim.opt.confirm = true
+vim.opt.writebackup = false
+
+-- セッション管理の改善
+vim.opt.sessionoptions = { "buffers", "curdir", "tabpages", "winsize", "help", "globals", "skiprtp", "folds" }

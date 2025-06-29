@@ -80,7 +80,8 @@ source "${ZINIT_HOME}/zinit.zsh"
 zinit wait lucid for \
   zsh-users/zsh-syntax-highlighting \
   zsh-users/zsh-autosuggestions \
-  zsh-users/zsh-completions
+  zsh-users/zsh-completions \
+  Aloxaf/fzf-tab
 
 # zコマンドのスニペットをロード
 zinit snippet https://github.com/rupa/z/blob/master/z.sh
@@ -130,4 +131,7 @@ zinit light-mode for \
 
 ## End of Zinit's installer chunk
 
+# fzf-tab の設定
+# fzf-tab の設定は compinit の後に記述する必要がある
+# fzf のキーバインドは fzf-tab が提供するため、~/.fzf.zsh の読み込みは不要になる
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
