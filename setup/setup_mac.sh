@@ -1,6 +1,6 @@
 #!/bin/bash
 
-brew bundle
+brew bundle --file="${HOME}"/Brewfile
 
 yes | "$(brew --prefix)"/opt/fzf/install
 
