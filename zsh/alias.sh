@@ -9,7 +9,7 @@ alias dt="dutree"
 alias f="fzf"
 alias gdb="gdb -q"
 alias grep="grep --color=auto"
-alias h="history"
+alias h="history | grep"
 alias l="ls -al --color=auto"
 alias ll="ls -al"
 alias ls="ls --color=auto"
@@ -38,6 +38,9 @@ alias vconf='cd ${NVIM}'
 alias vg="vgrep"
 alias wh="which"
 alias x="exit"
+
+alias now='date "+%Y-%m-%d %H:%M:%S"'
+alias week='date "+%Y-W%V"'
 
 alias d="docker"
 alias db="docker build"

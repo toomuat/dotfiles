@@ -54,6 +54,8 @@ setopt correct_all
 setopt extended_glob
 # スペースで始まるコマンドを履歴に保存しない
 setopt hist_ignore_space
+# 余分な空白を削除して履歴に保存
+setopt hist_reduce_blanks
 # インタラクティブシェルで # から始まる行をコメントとして扱う
 setopt interactive_comments
 
