@@ -146,9 +146,10 @@ vim.g.maplocalleader = " "
 
 -- 永続的なアンドゥを有効にする
 vim.opt.undofile = true
-vim.opt.undodir = vim.fn.stdpath("data") .. "/undo"
-if vim.fn.isdirectory(vim.opt.undodir.value) == 0 then
-  vim.fn.mkdir(vim.opt.undodir.value, "p")
+local undodir = vim.fn.stdpath("data") .. "/undo"
+vim.opt.undodir = undodir
+if vim.fn.isdirectory(undodir) == 0 then
+  vim.fn.mkdir(undodir, "p")
 end
 
 -- 追加のパフォーマンス向上設定
