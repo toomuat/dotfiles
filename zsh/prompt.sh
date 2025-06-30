@@ -8,29 +8,38 @@
 PROMPT="(%F{080}%C%f) %(?.%F{10}✔%f.%F{9}✘%f) $ "
 
 # Timer variables
-typeset -g _last_command_start_time
+typeset -g _last_command_start_ms
 typeset -g _last_command_duration
 
 # Function to record command start time
 _preexec_timer() {
-    _last_command_start_time=$(date +%s.%N) # Seconds with nanoseconds
+    _last_command_start_ms=$(printf "%.0f" $((EPOCHREALTIME * 1000)))
 }
 
 # Function to calculate and format command duration
+# コマンド実行後に呼ばれる関数。実行時間を計算してフォーマットし、右プロンプトに表示する
 _precmd_timer() {
-    if [[ -n "$_last_command_start_time" ]]; then
-        local end_time=$(date +%s.%N)
-        local duration=$(awk "BEGIN { printf \"%.3f\", ${end_time} - ${_last_command_start_time} }")
+    if [[ -n "$_last_command_start_ms" ]]; then
+        # 現在時刻（ミリ秒）を取得
+        local end_ms=$(printf "%.0f" $((EPOCHREALTIME * 1000)))
+        # 実行時間を計算（ミリ秒単位）
+        local duration_ms=$((end_ms - _last_command_start_ms))
 
-        if (($(awk "BEGIN { print (${duration} >= 1) }"))); then
-            _last_command_duration="(${duration}s)"
-        elif (($(awk "BEGIN { print (${duration} > 0) }"))); then
-            _last_command_duration="($(awk "BEGIN { printf \"%.0f\", ${duration} * 1000 }")ms)"
+        # 1秒以上の場合は秒単位で表示（小数点1桁）
+        if ((duration_ms >= 1000)); then
+            local duration_s=$(awk "BEGIN { printf \"%.1f\", ${duration_ms} / 1000 }")
+            _last_command_duration="(${duration_s}s)"
+        # 1秒未満でかつ実行時間が0より大きい場合はミリ秒で表示
+        elif ((duration_ms > 0)); then
+            _last_command_duration="(${duration_ms}ms)"
+        # 実行時間が0以下の場合は非表示
         else
             _last_command_duration=""
         fi
-        unset _last_command_start_time
+        # 開始時刻をクリア
+        unset _last_command_start_ms
     else
+        # 開始時刻が記録されていない場合は空にする
         _last_command_duration=""
     fi
 }
