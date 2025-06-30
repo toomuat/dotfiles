@@ -8,7 +8,7 @@
   pager = less -q -R
   editor = nvim
   autoCRLF = false
-  excludesFile = ${HOME}/.gitignore_global
+  excludesFile = ~/.gitignore_global
   whitespace = cr-at-eol
 [color]
   ui = true
