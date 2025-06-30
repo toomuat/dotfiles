@@ -7,6 +7,7 @@ export LESS=" -g -i -M -R -S -W -z-4 -x4 -Q -j10"
 export HISTFILE=~/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
+unsetopt extended_history
 
 export NVIM=$HOME/.config/nvim
 # export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
