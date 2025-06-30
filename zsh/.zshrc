@@ -67,6 +67,9 @@ zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' use-cache true
 
+# 隠しファイル・ディレクトリの補完を有効化
+setopt glob_dots
+
 # .zshrcのバイトコード化（zcompile）
 if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
   zcompile ~/.zshrc
