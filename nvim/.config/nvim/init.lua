@@ -5,7 +5,7 @@ require("config.lazy")
 
 -- -- プラグインパスをRTPに追加
 -- local lspsaga_path = vim.fn.stdpath("data") .. "/lazy/lspsaga.nvim"
--- if vim.loop.fs_stat(lspsaga_path) then
+-- if vim.uv.fs_stat(lspsaga_path) then
 --   vim.opt.rtp:prepend(lspsaga_path)
 --   -- vim.notify("Added lspsaga to runtimepath: " .. lspsaga_path, vim.log.levels.INFO)
 -- else
@@ -13,7 +13,7 @@ require("config.lazy")
 -- end
 
 -- デバッグ情報レベルを設定
-vim.lsp.set_log_level("debug")
+vim.lsp.log.set_level(vim.log.levels.DEBUG)
 
 -- lspモジュールをパスに追加
 vim.opt.rtp:append(vim.fn.stdpath("config"))

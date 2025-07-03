@@ -1,5 +1,6 @@
 -- 基本的なVimコマンドの自動コマンドをクリア
-vim.cmd("autocmd!")
+-- Note: Using autocmd! clears ALL autocommands which can interfere with plugins
+-- Consider using specific augroup management instead
 
 -- 文字コード設定
 vim.scriptencoding = "utf-8"
@@ -45,7 +46,9 @@ vim.cmd([[let &t_Ce = "\e[4:0m"]])
 -- 挿入モード終了時にペーストモードを自動で解除
 vim.api.nvim_create_autocmd("InsertLeave", {
   pattern = "*",
-  command = "set nopaste"
+  callback = function()
+    vim.opt.paste = false
+  end
 })
 
 -- ブロックコメントでアスタリスクを自動挿入
@@ -57,14 +60,14 @@ package.path = package.path .. ";" .. lsp_path .. "/?.lua"
 package.path = package.path .. ";" .. lsp_path .. "/?/init.lua"
 
 -- LSPのデバッグログを有効化
-vim.lsp.set_log_level("debug")
+vim.lsp.log.set_level(vim.log.levels.DEBUG)
 
 -- LSP関連のログファイルの場所を指定
 local nvim_cache = vim.fn.stdpath('cache')
 if vim.fn.isdirectory(nvim_cache) == 0 then
   vim.fn.mkdir(nvim_cache, 'p')
 end
-vim.env.NVIM_LSP_LOG_FILE = nvim_cache .. '/lsp.log'
+vim.fn.setenv("NVIM_LSP_LOG_FILE", nvim_cache .. '/lsp.log')
 
 -- デバッグ用：Luaモジュールの読み込み状況を表示するコマンド
 vim.api.nvim_create_user_command("CheckModule", function(opts)
@@ -128,17 +131,20 @@ vim.opt.laststatus = 3
 vim.api.nvim_create_autocmd({ "BufReadPost" }, {
   pattern = { "*" },
   callback = function()
-    vim.api.nvim_exec('silent! normal! g`"zv', false)
+    vim.cmd('silent! normal! g`"zv')
   end,
 })
 
 -- Goファイル用のインデント設定
-vim.api.nvim_exec([[
-  autocmd FileType go setlocal expandtab
-  autocmd FileType go setlocal shiftwidth=8
-  autocmd FileType go setlocal softtabstop=8
-  autocmd FileType go setlocal tabstop=8
-]], false)
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "go",
+  callback = function()
+    vim.opt_local.expandtab = true
+    vim.opt_local.shiftwidth = 8
+    vim.opt_local.softtabstop = 8
+    vim.opt_local.tabstop = 8
+  end,
+})
 
 -- leaderキーを<Space>に設定
 vim.g.mapleader = " "
