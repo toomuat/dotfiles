@@ -1,18 +1,41 @@
+# タイミング計測（環境変数 ZSHRC_TIMING=1 で有効化）
+if [[ "$ZSHRC_TIMING" == "1" ]]; then
+  zmodload zsh/datetime
+  _zshrc_start_time=$EPOCHREALTIME
+  
+  # タイミング計測用関数
+  _zshrc_time() {
+    local current_time=$EPOCHREALTIME
+    local elapsed=$(( current_time - _zshrc_start_time ))
+    printf "[%.3fs] %s\n" $elapsed "$1" >&2
+  }
+else
+  # 空の関数（何もしない）
+  _zshrc_time() { }
+fi
+
 # dotfilesのパスを設定（環境変数がなければデフォルト値）
 DOTFILES_PATH="${DOTFILES_PATH:-${HOME}/dotfiles}"
+_zshrc_time "DOTFILES_PATH設定完了"
 
 # OSごとに設定ファイルを読み込み
 if [[ "${OSTYPE}" == "darwin"* ]]; then
   source "${DOTFILES_PATH}"/zsh/mac.sh
+  _zshrc_time "mac.sh読み込み完了"
 elif [[ "$(uname -r)" =~ "microsoft" ]]; then
   source "${DOTFILES_PATH}"/zsh/wsl.sh
+  _zshrc_time "wsl.sh読み込み完了"
 fi
 
 # 各種zsh設定ファイルを読み込み
 source "${DOTFILES_PATH}"/zsh/alias.sh
+_zshrc_time "alias.sh読み込み完了"
 source "${DOTFILES_PATH}"/zsh/function.sh
+_zshrc_time "function.sh読み込み完了"
 source "${DOTFILES_PATH}"/zsh/prompt.sh
+_zshrc_time "prompt.sh読み込み完了"
 source "${DOTFILES_PATH}"/zsh/variable.sh
+_zshrc_time "variable.sh読み込み完了"
 
 # setopt で設定できるオプションは `man zshoptions`で確認できる
 #
@@ -74,12 +97,14 @@ setopt glob_dots
 if [ ~/.zshrc -nt ~/.zshrc.zwc ]; then
   zcompile ~/.zshrc
 fi
+_zshrc_time "zshオプション・バイトコード化完了"
 
 # Zinitのインストールと初期化
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d "${ZINIT_HOME}" ] && mkdir -p "$(dirname "${ZINIT_HOME}")"
 [ ! -d "${ZINIT_HOME}"/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "${ZINIT_HOME}"
 source "${ZINIT_HOME}/zinit.zsh"
+_zshrc_time "Zinit初期化完了"
 
 # プラグインの遅延ロード
 zinit wait lucid for \
@@ -87,9 +112,11 @@ zinit wait lucid for \
   zsh-users/zsh-autosuggestions \
   zsh-users/zsh-completions \
   Aloxaf/fzf-tab
+_zshrc_time "Zinitプラグイン設定完了"
 
 # zコマンドのスニペットをロード
 zinit snippet https://github.com/rupa/z/blob/master/z.sh
+_zshrc_time "zスニペット読み込み完了"
 
 # キーバインド設定
 # `binkey -L` で一覧表示可能
@@ -121,11 +148,18 @@ bindkey "^[[B" history-search-forward # 下矢印キー
 zle -N fancy-ctrl-z
 zle -N fzf-z-search
 
+# compinit の最適化：セキュリティチェックをスキップして高速化
 autoload -U compinit
-compinit
+if [[ -n ${ZDOTDIR}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
+_zshrc_time "compinit完了"
 
 # bunコマンドの補完スクリプトを読み込み
 [ -s "/opt/homebrew/Cellar/bun/0.8.1/share/zsh/site-functions/_bun" ] && source "/opt/homebrew/Cellar/bun/0.8.1/share/zsh/site-functions/_bun"
+_zshrc_time "bun補完読み込み完了"
 
 # annexes（Zinit拡張機能）のロード
 zinit light-mode for \
@@ -133,6 +167,7 @@ zinit light-mode for \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
+_zshrc_time "Zinit annexes読み込み完了"
 
 ## End of Zinit's installer chunk
 
@@ -140,3 +175,12 @@ zinit light-mode for \
 # fzf-tab の設定は compinit の後に記述する必要がある
 # fzf のキーバインドは fzf-tab が提供するため、~/.fzf.zsh の読み込みは不要になる
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+_zshrc_time "fzf設定完了"
+
+# 最終タイミング表示とクリーンアップ
+if [[ "$ZSHRC_TIMING" == "1" ]]; then
+  local total_time=$(( EPOCHREALTIME - _zshrc_start_time ))
+  printf "[%.3fs] .zshrc読み込み完了（合計時間）\n" $total_time >&2
+  unset _zshrc_start_time
+fi
+unfunction _zshrc_time
