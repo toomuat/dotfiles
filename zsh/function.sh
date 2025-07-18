@@ -157,8 +157,26 @@ gn() {
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 export FZF_DEFAULT_COMMAND="fd --type file --hidden --follow --exclude .git --color=always"
-export FZF_DEFAULT_OPTS="--height 90% --reverse --border --ansi --no-preview --bind alt-p:preview-up,alt-n:preview-down"
+# fzfのデフォルトオプション
+# --height: 高さを90%に設定
+# --reverse: 結果を上から下に表示
+# --border: ボーダーを表示
+# --ansi: ANSIカラーコードを有効化
+# --no-preview: デフォルトではプレビューを無効
+# キーバインド:
+#   alt-p/alt-n: プレビューの上下スクロール
+#   ctrl-u/ctrl-d: プレビューのページアップ/ダウン
+#   ctrl-y/ctrl-e: プレビューの行単位スクロール
+export FZF_DEFAULT_OPTS="--height 90% --reverse --border --ansi --no-preview --bind alt-p:preview-up,alt-n:preview-down,ctrl-u:preview-page-up,ctrl-d:preview-page-down,ctrl-y:preview-up,ctrl-e:preview-down"
+# fzfのAlt+C（ディレクトリ変更）専用オプション
+# Alt+Cを押すとサブディレクトリ一覧が表示され、選択したディレクトリに移動
+# --reverse: 結果を上から下に表示
+# --preview: ディレクトリの中身をtreeコマンドで表示（カラー付き、200行まで）
 export FZF_ALT_C_OPTS="--reverse --preview 'tree -C {} | head -200'"
+# fzfのCtrl+R（履歴検索）専用オプション
+# --preview: 選択中のコマンドをecho表示
+# --preview-window: プレビューを下部3行に表示、初期状態では非表示
+# --bind: ?キーでプレビューの表示/非表示を切り替え
 export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
 
 # fzfでブランチ選択してcheckout
@@ -209,10 +227,11 @@ fcat() {
 }
 
 # https://stackoverflow.com/questions/65366464/is-there-a-way-to-cancel-fzf-by-pressing-escape
+# fzfでファイルのプレビューを表示してnvimでファイルを開く
 vf() {
     local file_name
 
-    file_name=$(fzf) || return
+    file_name=$(fzf --preview 'bat --color=always {}') || return
     nvim "${file_name}"
 }
 
@@ -226,19 +245,26 @@ fcd() {
 
 # 任意コミットのファイルをfzfで選択して中身表示
 fgf() {
-    if [ ! -d ".git" ]; then
+    # Gitリポジトリ内にいるかチェック
+    if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
         echo "Not in a git repository."
         return
     fi
 
     local reply commit_id file_lists file
 
+    # Step 1: コミットを選択
     fzf_result=$(
-        git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" | fzf --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort --expect=enter,ctrl-c,esc --preview 'git show --color=always {}'
+        git log --graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+            fzf --no-sort --tiebreak=index \
+                --bind=ctrl-s:toggle-sort \
+                --expect=enter,ctrl-c,esc \
+                --preview-window=right:60%:wrap \
+                --preview "git show --color=always \$(echo {} | grep -o \"[a-f0-9]\\{7\\}\")"
     )
 
     reply=$(echo "${fzf_result}" | head -1)
-    commit_id=$(echo "${fzf_result}" | grep -o "[a-f0-9]\\{7\\}")
+    commit_id=$(echo "${fzf_result}" | tail -1 | grep -o "[a-f0-9]\\{7\\}")
     [[ -z "${commit_id}" ]] && return
 
     case "${reply}" in
@@ -248,14 +274,24 @@ fgf() {
     *) ;;
     esac
 
-    file_lists=$(git diff --name-only "${commit_id}")
+    # Step 2: そのコミットのファイルを選択
+    file_lists=$(git ls-tree -r --name-only "${commit_id}")
+    if [[ -z "${file_lists}" ]]; then
+        echo "No files found in commit ${commit_id}"
+        return
+    fi
+
     fzf_result=$(
         echo "${file_lists}" |
-            fzf <(echo "${file_lists}") --no-sort --tiebreak=index --bind=ctrl-s:toggle-sort --expect=enter,ctrl-c,esc --preview 'bat --color=always {}'
+            fzf --no-sort --tiebreak=index \
+                --bind=ctrl-s:toggle-sort \
+                --expect=enter,ctrl-c,esc \
+                --preview-window=right:60%:wrap \
+                --preview "git show --color=always ${commit_id}:{}"
     )
 
     reply=$(echo "${fzf_result}" | head -1)
-    file=$(echo "${fzf_result}" | head -2 | tail -1)
+    file=$(echo "${fzf_result}" | tail -1)
 
     case "${reply}" in
     enter) ;;
@@ -264,16 +300,37 @@ fgf() {
         fgf "$@"
         return
         ;;
-    *) echo $? ;;
+    *) return ;;
     esac
 
-    echo "${commit_id} ${file}"
-    git show "${commit_id}":"${file}"
+    if [[ -n "${file}" ]]; then
+        echo "Showing ${commit_id}:${file}"
+        git show "${commit_id}":"${file}"
+    fi
 }
 
 # fzfでカレントディレクトリのファイルをプレビュー
 fpre() {
-    fd --type f --hidden --follow --exclude .git | fzf --preview 'bat --color=always {}'
+    while true; do
+        local file
+        file=$(fd --type f --hidden --follow --exclude .git | fzf --preview 'bat --color=always {}' --expect=esc,enter)
+
+        local key=$(echo "$file" | head -1)
+        local selected_file=$(echo "$file" | tail -1)
+
+        case "$key" in
+        "enter")
+            if [[ -n "$selected_file" ]]; then
+                bat "$selected_file"
+                echo "Press any key to return to fzf..."
+                read -r
+            fi
+            ;;
+        "esc" | "")
+            break
+            ;;
+        esac
+    done
 }
 
 # GitHub Actions workflowを実行
@@ -347,7 +404,8 @@ ghv() {
 
 # fzfでPRを選択してcheckout
 ghp() {
-    selected_pr=$(gh pr list --limit 100 | fzf --preview 'gh pr view {} --json body --template "{{.body}}"')
+    echo "PRを選択するとそのブランチにcheckoutされます"
+    selected_pr=$(gh pr list --limit 100 | fzf --preview "gh pr view \$(echo {} | cut -f1) --json body --template \"{{.body}}\"")
     pr_number=$(echo "${selected_pr}" | awk '{print $1}')
     if [ -n "${pr_number}" ]; then
         gh co "${pr_number}"
@@ -358,7 +416,8 @@ ghp() {
 
 # fzfでPRを選択してwebで表示
 ghpv() {
-    selected_pr=$(gh pr list --limit 100 | fzf --preview 'gh pr view {} --json body --template "{{.body}}"')
+    echo "PRを選択するとwebで表示されます"
+    selected_pr=$(gh pr list --limit 100 | fzf --preview "gh pr view \$(echo {} | cut -f1) --json body --template \"{{.body}}\"")
     pr_number=$(echo "${selected_pr}" | awk '{print $1}')
     if [ -n "${pr_number}" ]; then
         gh pr view -w "${pr_number}"
@@ -425,13 +484,18 @@ ffunc-preview() {
     # 検索対象のファイルを列挙する
     # 他にも関数を定義しているファイルがあればここに追加してください
     local zsh_files=(
-        "/Users/t.onai/dotfiles/zsh/function.sh"
-        "/Users/t.onai/dotfiles/zsh/alias.sh"
-        "/Users/t.onai/dotfiles/zsh/.zshrc"
+        "~/dotfiles/zsh/function.sh"
+        "~/dotfiles/zsh/alias.sh"
+        "~/dotfiles/zsh/.zshrc"
     )
 
+    # チルダを展開した絶対パスに変換
+    local expanded_files=()
+    for file in "${zsh_files[@]}"; do
+        expanded_files+=("$(eval echo "$file")")
+    done
+
     # awkスクリプトでコメントと関数を抽出し、fzfに渡す
-    # 選択された行から関数名だけを抜き出してクリップボードにコピーする
     local selected_func
     selected_func=$(awk '
         # 関数定義のパターンに一致した場合 (例: my_func() { )
@@ -444,9 +508,9 @@ ffunc-preview() {
             if (comment_buffer) {
                 # コメントの先頭の # とスペースを削除して整形
                 gsub(/^[[:space:]]*#[[:space:]]*/, "", comment_buffer)
-                printf "%-35s --- %s\n", func_name, comment_buffer
+                printf "%-5s --- %s\n", func_name, comment_buffer
             } else {
-                printf "%-35s\n", func_name
+                printf "%-5s\n", func_name
             }
             # バッファをリセット
             comment_buffer = ""
@@ -464,7 +528,21 @@ ffunc-preview() {
         }
         # コメントでも関数定義でもない行が来たらバッファをリセット
         { comment_buffer = "" }
-    ' "${zsh_files[@]}" | fzf)
+    ' "${expanded_files[@]}" | fzf --preview '
+        func_name=$(echo {} | awk "{print \$1}")
+        if [[ -n "$func_name" ]]; then
+            for file in '"$(printf '"%s" ' "${expanded_files[@]}")"'; do
+                if [[ -f "$file" ]]; then
+                    line_num=$(grep -n "^${func_name}[[:space:]]*(" "$file" | head -1 | cut -d: -f1)
+                    if [[ -n "$line_num" ]]; then
+                        echo "=== Function: $func_name in $file ==="
+                        sed -n "${line_num},$((line_num + 15))p" "$file"
+                        break
+                    fi
+                fi
+            done
+        fi
+    ' --preview-window=right:60%:wrap --bind '?:toggle-preview')
 
     # fzfで何かが選択された場合
     if [[ -n "$selected_func" ]]; then
@@ -472,6 +550,6 @@ ffunc-preview() {
         local func_to_copy
         func_to_copy=$(echo "$selected_func" | awk '{print $1}')
         echo -n "$func_to_copy" | pbcopy
-        echo "Copied '''$func_to_copy''' to clipboard."
+        echo "Copied '$func_to_copy' to clipboard."
     fi
 }
