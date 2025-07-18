@@ -484,9 +484,9 @@ ffunc-preview() {
     # 検索対象のファイルを列挙する
     # 他にも関数を定義しているファイルがあればここに追加してください
     local zsh_files=(
-        "~/dotfiles/zsh/function.sh"
-        "~/dotfiles/zsh/alias.sh"
-        "~/dotfiles/zsh/.zshrc"
+        "$HOME/dotfiles/zsh/function.sh"
+        "$HOME/dotfiles/zsh/alias.sh"
+        "$HOME/dotfiles/zsh/.zshrc"
     )
 
     # チルダを展開した絶対パスに変換
@@ -528,21 +528,21 @@ ffunc-preview() {
         }
         # コメントでも関数定義でもない行が来たらバッファをリセット
         { comment_buffer = "" }
-    ' "${expanded_files[@]}" | fzf --preview '
-        func_name=$(echo {} | awk "{print \$1}")
-        if [[ -n "$func_name" ]]; then
-            for file in '"$(printf '"%s" ' "${expanded_files[@]}")"'; do
-                if [[ -f "$file" ]]; then
-                    line_num=$(grep -n "^${func_name}[[:space:]]*(" "$file" | head -1 | cut -d: -f1)
-                    if [[ -n "$line_num" ]]; then
-                        echo "=== Function: $func_name in $file ==="
-                        sed -n "${line_num},$((line_num + 15))p" "$file"
+    ' "${expanded_files[@]}" | fzf --preview "
+        func_name=\$(echo {} | awk \"{print \\\$1}\")
+        if [[ -n \"\$func_name\" ]]; then
+            for file in $(printf '\"%s\" ' "${expanded_files[@]}"); do
+                if [[ -f \"\$file\" ]]; then
+                    line_num=\$(grep -n \"^\${func_name}[[:space:]]*\" \"\$file\" | head -1 | cut -d: -f1)
+                    if [[ -n \"\$line_num\" ]]; then
+                        echo \"=== Function: \$func_name in \$file ===\"
+                        sed -n \"\${line_num},\$((line_num + 15))p\" \"\$file\"
                         break
                     fi
                 fi
             done
         fi
-    ' --preview-window=right:60%:wrap --bind '?:toggle-preview')
+    " --preview-window=right:60%:wrap --bind '?:toggle-preview')
 
     # fzfで何かが選択された場合
     if [[ -n "$selected_func" ]]; then
