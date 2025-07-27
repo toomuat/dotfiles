@@ -20,12 +20,14 @@ yes_pid=$!
 wait $yes_pid
 
 # Neovim
-wget https://github.com/neovim/neovim/releases/download/v0.11.3/nvim-linux-x86_64.tar.gz &&
+LATEST_URL=$(curl -s "https://api.github.com/repos/neovim/neovim/releases/latest" | grep -o 'https://github.com/neovim/neovim/releases/download/.*/nvim-linux-x86_64.tar.gz')
+wget "${LATEST_URL}" &&
     tar xf nvim-linux-x86_64.tar.gz &&
     sudo cp nvim-linux-x86_64/bin/nvim /usr/local/bin &&
     sudo cp -r nvim-linux-x86_64/lib/nvim /usr/local/lib &&
     sudo cp -r nvim-linux-x86_64/share/nvim /usr/local/share &&
-    rm nvim-linux-x86_64.tar.gz
+    rm nvim-linux-x86_64.tar.gz &&
+    rm -rf nvim-linux-x86_64
 
 # NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
