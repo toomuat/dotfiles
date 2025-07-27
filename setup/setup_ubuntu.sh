@@ -20,18 +20,12 @@ yes_pid=$!
 wait $yes_pid
 
 # Neovim
-# wget https://github.com/neovim/neovim/releases/download/v0.8.2/nvim-linux64.deb && \
-#   apt install ./nvim-linux64.deb && \
-#   rm ./nvim-linux64.deb
-wget https://github.com/neovim/neovim/releases/download/v0.9.0/nvim-linux64.tar.gz &&
-    tar xf nvim-linux64.tar.gz &&
-    sudo cp nvim-linux64/bin/nvim /usr/local/bin &&
-    sudo cp -r nvim-linux64/lib/nvim /usr/local/lib &&
-    sudo cp -r nvim-linux64/share/nvim /usr/local/share &&
-    rm nvim-linux64.tar.gz
-# Packer
-git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
-# Run :PackerInstall in Neovim
+wget https://github.com/neovim/neovim/releases/download/v0.11.3/nvim-linux-x86_64.tar.gz &&
+    tar xf nvim-linux-x86_64.tar.gz &&
+    sudo cp nvim-linux-x86_64/bin/nvim /usr/local/bin &&
+    sudo cp -r nvim-linux-x86_64/lib/nvim /usr/local/lib &&
+    sudo cp -r nvim-linux-x86_64/share/nvim /usr/local/share &&
+    rm nvim-linux-x86_64.tar.gz
 
 # NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
