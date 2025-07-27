@@ -16,7 +16,11 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     brew install git
 
-    git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
+    if [ ! -d "${DOTFILES_PATH}" ]; then
+        git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
+    else
+        echo "Dotfiles directory already exists. Skipping clone."
+    fi
 
     mkdir -p "${HOME}"/.config
     cd "${DOTFILES_PATH}"
@@ -24,12 +28,15 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     cd -
 
     /bin/bash "${DOTFILES_PATH}"/setup/setup_mac.sh
-
 elif [[ "$(uname -r)" =~ "microsoft" ]] || [[ $(grep -c "Ubuntu" /etc/os-release) -gt 0 ]]; then
     echo "Detected Ubuntu/WSL. Starting setup..."
     sudo apt update && sudo apt install -y git
 
-    git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
+    if [ ! -d "${DOTFILES_PATH}" ]; then
+        git clone "${DOTFILES_URL}" "${DOTFILES_PATH}"
+    else
+        echo "Dotfiles directory already exists. Skipping clone."
+    fi
 
     mkdir -p "${HOME}"/.config
     cd "${DOTFILES_PATH}"
@@ -37,7 +44,6 @@ elif [[ "$(uname -r)" =~ "microsoft" ]] || [[ $(grep -c "Ubuntu" /etc/os-release
     cd -
 
     /bin/bash "${DOTFILES_PATH}"/setup/setup_ubuntu.sh
-
 else
     echo "OS other than macOS and Ubuntu are not supported."
     exit 1
